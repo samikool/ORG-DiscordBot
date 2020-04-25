@@ -160,3 +160,7 @@ async function findUser(id){
 }
 
 client.login(process.env.TOKEN);
+
+
+//I love sam
+//he is really cool
