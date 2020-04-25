@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -157,4 +159,4 @@ async function findUser(id){
     return retUser;
 }
 
-client.login('NjcxMDQ2MzYyNzgzMTU0MjI0.Xi3kjA.X8qP0_pafv_6oYgNRsBELUae9S4');
+client.login(process.env.TOKEN);
