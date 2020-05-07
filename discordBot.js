@@ -1,166 +1,343 @@
 require('dotenv').config()
-
-const Discord = require('discord.js');
 const client = new Discord.Client();
+const fs = require('fs')
+const moment = require("moment")
+const fetch = require("node-fetch");
 
-possibleCommands = ['!JackieJTheJackhammer', '!Trey', '!Ben', '!Reserve', '!Interchange', '!Shoreline', '!labs', 
-'!Factory', '!Customs', '!Woods', '!Dorms', '!Resort', '!Labs', '!Ammo', 'Roll', '!Help']
+var question2 = "";
+var answer = "";
+var category = "";
+var getvalues = [];
+var newquestion = [];
+var quizsent = '';
 
-client.once('ready', () => {
-    console.log('Logged in as ' + client.user.tag);
-});
+
+
+
+var QTmembers = "";
+var accounts = [];
+var values = [];
+var firstquestion = true;
+
+
+
+possibleCommands = ['!jackiejthejackhammer', '!trey', '!ben', '!reserve', '!interchange', '!shoreline', '!labs', 
+'!factory', '!customs', '!woods', '!dorms', '!resort', '!labs', '!ammo', '!roll', '!help', '!whattrey', '!bdawg', '!handitrey', '!quiz', '!quizme']
+
+//phrases go here
+responses = {
+    ben: "Actually his name is David",
+    trey: "Fuck Trey",
+}
+
+//images in array format
+//change the directory for master to where the images are stored on your computer (pretty sure you have to use exact path)
+//make sure images are in their own folder 
+imagedirectory = fs.readdirSync('C:/Users/benhi/Documents/GitHub/Discord-Files/images');
+
+
+
+
+
+
+
+
+
+// console.log(currentTime)
+// console.log(setTime)
+
 
 client.on('message', async function(msg) {
-    if(!msg.content.startsWith('!')){return;}
+    //if(!msg.content.startsWith('!')){return;}
+
+    if (msg.content.startsWith('!')) {
+        var command = msg.content.toLowerCase().split(' ')[0];
+    } else {
+        for (i = 0; i < accounts.length; i++) {
+        if (msg.author.id == accounts[i].username) {
+            console.log(msg.content);
+
+            console.log(msg.author.id);
+            console.log(accounts[i].username);
+    
+            if (msg.content.toLowerCase() == accounts[i].answer.toLowerCase()) {
+                accounts[i].correctQuestions++;
+                console.log("Number of questions correct is " + accounts[i].correctQuestions); 
+                firstquestion = false;
 
 
-    var command = msg.content.toLowerCase().split(' ')[0];
-    var arg = msg.content.toLowerCase().split(' ')[1];
+                if (accounts[i].correctQuestions >= 3) {
+                    client.users.cache.get(accounts[i].username).send("Congrats you fucking aced the fuck out of that quiz!");
+                    const guild = client.guilds.cache.get("703672376109432892");
+                    var member = guild.members.cache.get(accounts[i].username);
+                    member.roles.add('704088583853572191');
+                    member.roles.remove('703726754065547415');
+                    accounts[i].correctQuestions = 0;
 
-    if(command == '!trey'){
-        console.log('Fuck Trey')
-        msg.channel.send('Fuck Trey');
-    }
-    else if(command == '!ben'){
-        console.log('David');
-        msg.channel.send('Actually his name is David');
-    }
-    else if(command == '!jackiejthejackhammer'){
-        console.log('JackieJ');
-        msg.channel.send({
-            files: [{
-                attachment: 'JackieJTheJackhammer.png' 
-            }]
-        })
-    }
-    else if(command == '!handitrey'){
-        console.log('HandiTrey');
-        msg.channel.send({
-            files: [{
-                attachment: 'handitrey.png'
-            }]
-        })
-    }
-    else if(command == '!whattrey'){
-        console.log('whatTrey');
-        msg.channel.send({
-            files: [{
-                attachment: 'whattrey.png'
-            }]
-        })
-    }
-    else if(command == '!bdawg'){
-        console.log('Bdawg');
-        msg.channel.send({
-            files: [{
-                attachment: 'bdawg.png'
-            }]
-        })
-    }
-    //Send Maps
-    else if(command == '!reserve' || 
-    command == '!interchange' ||
-    command == '!shoreline' || 
-    command == '!labs' ||
-    command == '!factory' || 
-    command == '!customs' || 
-    command == '!woods' ||
-    command == '!dorms' ||
-    command == '!resort' 
-    )
-    {
-        var map = msg.content.substring(1, msg.content.length);
-        console.log('sending ' + map + ' map for ' + msg.author.username);
-        msg.channel.send({
-            files: [{
-                attachment: './' + map + 'Map.png'
-            }]
-        })
-        .catch(console.error);
 
-    }
-    //Send ammo chart
-    else if(command == '!ammo'){
-        console.log('sending ammo chart...');
-        msg.channel.send({
-            files: [{
-                attachment: 'ammo.png'
-            }]
-        })
-        .catch(console.error);
-    }
-    else if(command == '!roll'){
-        console.log("ROLLING!");
-        var random = Math.random();
-        console.log(random);
-        if(random < 0.5){
-            msg.channel.send("Heads");
-        }else{
-            msg.channel.send("Tails");
-        }
-    }
-    else if(command == '!quizme'){
-        //console.log(msg.author.id)
-        //console.log(msg)
-        quiztaker = 379844352714997761 //Sam
-        // quiztaker = 247897498104889345 //Ben
-        // quiztaker = 247897365393047552 //Brandon
-        // quiztaker = 253269487137062925 //Jackson 
-        // quiztaker = 247906022004490241 //Trey
-        if(msg.author.id == quiztaker){
-            cantalk = await givequiz(quiztaker)
-            console.log(msg.member.serverMute)
-            console.log(msg.member.serverDeaf)
-            msg.member.setMute(true)
-            msg.member.setDeaf(true)
-            //msg.author.memeber.setDeaf(true)
-            if(cantalk){
+
+
+
+
+                }else {
+                    newquestion = await getNextQuestion();
+                    console.log(newquestion);
+                    sendquestion = await createQuestionsForUsers(newquestion[0], newquestion[1], newquestion[2], accounts[i].correctQuestions, accounts[i].username);
+                }
+
                 
-            }else{
 
+    
+               
+    
             }
-        }
-    }
-    else if(command == '!quiz'){
-        console.log(msg);
-        console.log(msg.mentions.users.firstKey());
-        userId = await msg.mentions.users.firstKey();
-        user = await findUser(userId);
-        user.setMute(true);
-        user.setDeaf(true);
-    }
-    else{
-        commands = '';
-        for(i=0; i<possibleCommands.length; i++){
-            commands += possibleCommands[i];
-            if(i != possibleCommands.length){
-                commands += ', ';
+            else {
+                console.log("Number of questions correct is " + accounts[i].correctQuestions)
+                firstquestion = false;
+                newquestion = await getNextQuestion();
+                console.log(newquestion);
+                sendquestion = await createQuestionsForUsers(newquestion[0], newquestion[1], newquestion[2], accounts[i].correctQuestions, accounts[i].username);
             }
-        }
-        console.log('Sending commands for ' + msg.author.username);
-        msg.channel.send('Possible commands are: ' + commands)
+        };
     }
+    }
+
+    
+
+
+    //new if then to determine if it is an image or a phrase based on command entered
+    if (possibleCommands.includes(command) == true) {
+        console.log("The command was " + command);
+        command2 = command.substring(1);
+
+        if (imagedirectory.includes(command2 + ".png")) {
+            msg.channel.send({files: ["./images/" + command2 + ".png"]});
+
+
+        }else if(command == '!roll'){
+            console.log("ROLLING!");
+            var random = Math.random();
+            console.log(random);
+            if(random < 0.5){
+                msg.channel.send("Heads");
+            }else{
+                msg.channel.send("Tails");}
+
+
+
+        }else if(command == '!quizme'){
+            console.log(msg.author.id);
+            console.log(msg.member.roles.find(r => r.name === "Triggerd Shit Lord"));
+        }
+        else if (command == '!help'){
+            commands = '';
+            for(i=0; i<possibleCommands.length; i++){
+                commands += possibleCommands[i];
+                if(i != possibleCommands.length){
+                    commands += ', ';
+                }
+            }
+            console.log('Sending commands for ' + msg.author.username);
+            msg.channel.send('Possible commands are: ' + commands);
+        }  
+        //this one has to be last
+        else if (responses[command2] == responses[command2]) {
+        msg.channel.send(responses[command2]);
+        
+        
+    }
+}
+
 });
 
-async function givequiz(id){
 
-}
 
-async function findUser(id){
-    console.log(id)
-    retUser = {}
-    await client.users.forEach(user => {
-        if(id == user.id){
-            console.log('Found user')
-            retUser = user.lastMessage.member;
+
+
+client.on('ready', async function ()  {
+
+    //Checks for 5PM every hour
+    setInterval(() => {
+        if (checkTime2() == true) {
+            quizsent = false;
+         }
+
+
+        if (quizsent == true) {
+            console.log("quizes already sent")
+        } else {
+           
+            if (checkTime() == true) {
+        
+                startquiz();
+    
+                quizsent = true;
+    
+            }
         }
-    });
+      }, 15000); // this is mesaured in milliseconds (15 seconds)
 
-    return retUser;
+});
+
+
+
+
+// ################################################# FUNCTIONS FOR THE QUIZ BOT ################################################
+
+async function getNextQuestion () {
+    try {
+        await fetch("https://opentdb.com/api.php?amount=1").then((resp) => resp.json()).then(async function(data) {
+
+            var obj = data.results[0];
+    
+            question = obj.question.replace(/&#039;/g, "\'");
+    
+            question2 = question.replace(/&quot;/g, "\"");
+    
+            answer = obj.correct_answer;
+    
+            category = obj.category;
+    
+            values = [category, question2, answer];
+        })
+    }
+    catch {
+        console.log("something went wrong here")
+    }
+    return values
+}    
+    
+    
+
+
+
+
+async function getQTMembers() {
+    
+    const guild = client.guilds.cache.get("703672376109432892");
+    QTmembers = guild.roles.cache.get('704088583853572191').members.map(m=>m.user.id);
+    console.log(QTmembers);
+    for (i = 0; i < QTmembers.length; i++) {
+        var member = guild.members.cache.get(QTmembers[i]);
+        member.roles.add("703726754065547415")
+        member.roles.remove("704088583853572191")
+    }
+
 }
+
+
+
+async function createQuestionsForUsers(category, question, answer, correctQuestions, userid) {
+    if (firstquestion == true) {
+        for (i = 0; i < QTmembers.length; i++) {
+            client.users.cache.get(String(QTmembers[i])).send("Hey there it is time for your Quiz! Remember you did this to yourself and nobody else is to blame you silly piece of shit. Have fun with your quiz, hope to talk to you soon!");
+            accounts[i] = "quiztaker" + [i]
+            accounts[i] = {
+                username: String(QTmembers[i]),
+                category: category,
+                userquestion: question,
+                answer: answer,
+                correctQuestions: 0,
+            };
+            console.log("The first question if statmement happend")
+            //Send the question to the user
+            client.users.cache.get(accounts[i].username).send("The category is " + accounts[i].category + "\n" + "Question: " + accounts[i].userquestion);
+    }
+    
+    } else if (firstquestion == false) {
+        for (i = 0; i < accounts.length; i++) {
+            console.log("The user id is " + userid);
+            if (userid == accounts[i].username) {
+                accounts[i] = {
+                    username: userid,
+                    category: category,
+                    userquestion: question,
+                    answer: answer,
+                    correctQuestions: correctQuestions,
+                };
+                console.log("The question sent to a single person")
+                //Send the question to the user
+                client.users.cache.get(accounts[i].username).send("The category is " + accounts[i].category + "\n" + "Question: " + accounts[i].userquestion);
+            }
+            
+    
+            
+    }
+    }
+
+
+
+
+
+
+
+}
+
+
+async function startquiz() {
+    getQTMembers();
+    getvalues = await getNextQuestion();
+    console.log(getvalues[0]);
+    console.log(getvalues[1]);
+    console.log(getvalues[2]);
+    for (i = 0; i < QTmembers.length; i++) {
+        sendquestion = await createQuestionsForUsers(getvalues[0], getvalues[1], getvalues[2]);
+    }
+    
+
+}
+
+
+
+
+
+// Checks for 5PM
+function checkTime() {
+    var currentTime = moment().format("HH:mm");
+    var setTime = moment().format("17:00");
+    if (currentTime >= setTime) {
+        console.log("Time has passed");
+        return true
+    } else if (currentTime <= setTime) {
+        console.log("Time has not occured yet");
+        return false
+    }
+}
+
+
+//Checks for 5AM
+function checkTime2() {
+    var currentTime = moment().format("HH:mm");
+    var setTime = moment().format("05:00");
+    if (currentTime <= setTime) {
+        console.log("Time has passed");
+        return true
+    } else if (currentTime >= setTime) {
+        console.log("Time has not occured yet");
+        return false
+    }
+}
+
 
 client.login(process.env.TOKEN);
 
 
-//I love sam
-//he is really cool
+// ################################################### NOTES #########################################################
+
+
+//Example of numbers needed
+//user id = 703671948718112798
+//discord server = 703672376109432892
+//triggered shit lord channel = 703726754065547415
+//quiz taker id = 704088583853572191
+
+
+
+
+// use this to find out the id of a role in the discord server
+    // var guild2 = client.guilds.cache.get("703672376109432892");
+    // const role = guild2.roles.cache.find(guild2 => guild2.name === 'Quiz Takers');
+    // console.log(role)
+
+
+
