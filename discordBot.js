@@ -70,7 +70,6 @@ client.on('ready', async function ()  {
 });
 
 client.on('message', async function(msg) {
-    
     //if message is from chat channel
     if (msg.channel.type === 'text' && msg.content.startsWith('!')) {
         var command = msg.content.toLowerCase().split(' ')[0];
