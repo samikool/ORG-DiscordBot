@@ -5,7 +5,7 @@ const client = new Discord.Client();
 
 const fs = require('fs');
 const moment = require("moment");
-
+const fetch = require("node-fetch");
 
 const Quizzer = require('./quizzer.js')
 let quizzer;
@@ -214,9 +214,6 @@ async function createQuestionsForUsers(category, question, answer, correctQuesti
                 //Send the question to the user
                 client.users.cache.get(accounts[i].username).send("The category is " + accounts[i].category + "\n" + "Question: " + accounts[i].userquestion);
             }
-            
-    
-            
         }
     }
 }
@@ -230,8 +227,6 @@ async function startquiz() {
     for (i = 0; i < QTmembers.length; i++) {
         sendquestion = await createQuestionsForUsers(getvalues[0], getvalues[1], getvalues[2]);
     }
-    
-
 }
 // Checks for 5PM
 function checkTime() {
@@ -245,7 +240,6 @@ function checkTime() {
         return false
     }
 }
-
 
 //Checks for 5AM
 function checkTime2() {
