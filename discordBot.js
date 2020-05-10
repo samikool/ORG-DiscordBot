@@ -11,6 +11,7 @@ const Quizzer = require('./quizzer.js')
 let quizzer;
 
 // const SAFE_SPACE_CHANNEL_ID = 247897731551592448;
+// const DM_CHANNEL_ID = 671046362783154224
 
 var question2 = "";
 var answer = "";
@@ -88,9 +89,7 @@ client.on('message', async function(msg) {
                     msg.channel.send("Tails");
                 }
             }else if(command == '!quiz'){
-                //not working
-                console.log(msg.mentions.members.first().id);
-                quizzer.startQuiz(msg.mentions.members.first().id)
+                quizzer.startQuiz(msg.mentions.members.first().id) 
             }
             else if (command == '!help'){
                 commands = '';
@@ -109,13 +108,13 @@ client.on('message', async function(msg) {
             }
         }
     }else {
-        console.log(accounts)
+        //console.log(accounts)
         for (i = 0; i < accounts.length; i++) {
             if (msg.author.id == accounts[i].username) {
-                console.log(msg.content);
+                //console.log(msg.content);
 
-                console.log(msg.author.id);
-                console.log(accounts[i].username);
+                //console.log(msg.author.id);
+                //console.log(accounts[i].username);
         
                 if (msg.content.toLowerCase() == accounts[i].answer.toLowerCase()) {
                     accounts[i].correctQuestions++;
@@ -132,18 +131,23 @@ client.on('message', async function(msg) {
                         accounts[i].correctQuestions = 0;
                     }else {
                         newquestion = await getNextQuestion();
-                        console.log(newquestion);
+                        //console.log(newquestion);
                         sendquestion = await createQuestionsForUsers(newquestion[0], newquestion[1], newquestion[2], accounts[i].correctQuestions, accounts[i].username);
                     }
                 }
                 else {
-                    console.log("Number of questions correct is " + accounts[i].correctQuestions)
+                    //console.log("Number of questions correct is " + accounts[i].correctQuestions)
                     firstquestion = false;
                     newquestion = await getNextQuestion();
-                    console.log(newquestion);
+                    //console.log(newquestion);
                     sendquestion = await createQuestionsForUsers(newquestion[0], newquestion[1], newquestion[2], accounts[i].correctQuestions, accounts[i].username);
                 }
             };
+        }
+        //start of new quiz logic
+        let userID = msg.author.id;
+        if(quizzer.isTakingQuiz(userID)){
+            quizzer.checkAnswer(userID, msg.content)
         }
     }
     //new if then to determine if it is an image or a phrase based on command entered
@@ -172,9 +176,9 @@ async function getNextQuestion () {
     
 async function getQTMembers() {
     const guild = client.guilds.cache.get("247897731551592448");
-    console.log(guild)
+
     QTmembers = guild.roles.cache.get('708857911446601770').members.map(m=>m.user.id);
-    console.log(QTmembers);
+    //console.log(QTmembers);
     for (i = 0; i < QTmembers.length; i++) {
         var member = guild.members.cache.get(QTmembers[i]);
         member.roles.add("296103466844028928")
