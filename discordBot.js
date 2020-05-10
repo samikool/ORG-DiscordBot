@@ -1,11 +1,16 @@
 require('dotenv').config()
 
-
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const fs = require('fs')
-const moment = require("moment")
+const fs = require('fs');
+const moment = require("moment");
 const fetch = require("node-fetch");
+
+const Quizzer = require('./quizzer.js')
+const quizzer = new Quizzer(Discord, client);
+
+
+
 
 var question2 = "";
 var answer = "";
@@ -19,6 +24,7 @@ var accounts = [];
 var values = [];
 var firstquestion = true;
 
+
 possibleCommands = ['!jackiejthejackhammer', '!trey', '!ben', '!reserve', '!interchange', '!shoreline', '!labs', 
 '!factory', '!customs', '!woods', '!dorms', '!resort', '!labs', '!ammo', '!roll', '!help', '!whattrey', '!bdawg', '!handitrey', '!quiz', '!quizme']
 
@@ -31,8 +37,8 @@ responses = {
 //images in array format
 //change the directory for master to where the images are stored on your computer (pretty sure you have to use exact path)
 //make sure images are in their own folder 
-imagedirectory = fs.readdirSync('C:/Users/benhi/Documents/GitHub/Discord-Files/images');
-
+//imagedirectory = fs.readdirSync('C:/Users/benhi/Documents/GitHub/Discord-Files/images');
+imagedirectory = fs.readdirSync('E:/git/TarkovDiscordbot/Images');
 // console.log(currentTime)
 // console.log(setTime)
 
@@ -42,6 +48,7 @@ client.on('message', async function(msg) {
     if (msg.content.startsWith('!')) {
         var command = msg.content.toLowerCase().split(' ')[0];
     } else {
+        console.log(accounts)
         for (i = 0; i < accounts.length; i++) {
             if (msg.author.id == accounts[i].username) {
                 console.log(msg.content);
@@ -56,10 +63,11 @@ client.on('message', async function(msg) {
 
                     if (accounts[i].correctQuestions >= 3) {
                         client.users.cache.get(accounts[i].username).send("Congrats you fucking aced the fuck out of that quiz!");
-                        const guild = client.guilds.cache.get("703672376109432892");
+                        const guild = client.guilds.cache.get("247897731551592448");
                         var member = guild.members.cache.get(accounts[i].username);
-                        member.roles.add('704088583853572191');
-                        member.roles.remove('703726754065547415');
+                        member.roles.add('708857911446601770');
+                        member.roles.remove('296103466844028928');
+                        member.voice.setMute(false);
                         accounts[i].correctQuestions = 0;
                     }else {
                         newquestion = await getNextQuestion();
@@ -78,7 +86,7 @@ client.on('message', async function(msg) {
         }
     }
     //new if then to determine if it is an image or a phrase based on command entered
-    if (possibleCommands.includes(command) == true) {
+    if (possibleCommands.includes(command)) {
         console.log("The command was " + command);
         command2 = command.substring(1);
         if (imagedirectory.includes(command2 + ".png")) {
@@ -93,6 +101,7 @@ client.on('message', async function(msg) {
                 msg.channel.send("Tails");
             }
         }else if(command == '!quizme'){
+            //not working
             console.log(msg.author.id);
             console.log(msg.member.roles.find(r => r.name === "Triggerd Shit Lord"));
         }
@@ -114,6 +123,8 @@ client.on('message', async function(msg) {
     }
 });
 
+
+
 client.on('ready', async function ()  {
 
     //Checks for 5PM every hour
@@ -129,7 +140,7 @@ client.on('ready', async function ()  {
                 quizsent = true;
             }
         }
-      }, 15000); // this is mesaured in milliseconds (15 seconds)
+      }, 5000); // this is mesaured in milliseconds (15 seconds)
 });
 
 // ################################################# FUNCTIONS FOR THE QUIZ BOT ################################################
@@ -152,13 +163,14 @@ async function getNextQuestion () {
 }    
     
 async function getQTMembers() {
-    const guild = client.guilds.cache.get("703672376109432892");
-    QTmembers = guild.roles.cache.get('704088583853572191').members.map(m=>m.user.id);
+    const guild = client.guilds.cache.get("247897731551592448");
+    QTmembers = guild.roles.cache.get('708857911446601770').members.map(m=>m.user.id);
     console.log(QTmembers);
     for (i = 0; i < QTmembers.length; i++) {
         var member = guild.members.cache.get(QTmembers[i]);
-        member.roles.add("703726754065547415")
-        member.roles.remove("704088583853572191")
+        member.roles.add("296103466844028928")
+        member.roles.remove("708857911446601770")
+        member.voice.setMute(true);
     }
 }
 
