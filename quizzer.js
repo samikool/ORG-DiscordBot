@@ -55,7 +55,7 @@ class Quizzer{
      * @param {*} answer 
      */
     checkAnswer(userID, answer){
-        if(this.currentQuiztakers[userID].question.answer === answer){
+        if(this.currentQuiztakers[userID].question.answer.toLowerCase() === answer.toLowerCase()){
             this.correctAnswer(userID)
         }else{
             this.wrongAnswer(userID)
