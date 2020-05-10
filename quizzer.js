@@ -11,7 +11,6 @@ class Quizzer{
         this.currentQuiztakers = {};
         
         this.startUpdateQuiztakerInterval()
-        this.startQuiz("379844352714997761")
     }
 
     /**
@@ -30,7 +29,7 @@ class Quizzer{
      * Function takes a userID and returns true if user is taking quiz
      * @param {}
      */
-    isTakingQuiz(){
+    isTakingQuiz(userID){
         return this.currentQuiztakers[userID] ? true : false;
     }
 
@@ -49,13 +48,37 @@ class Quizzer{
 
     }
 
+    correctAnswer(userID){
+        this.currentQuiztakers[userID].correct += 1;
+        if(this.currentQuiztakers[userID].correct === 3){
+            this.finishQuiz(userID)
+        }else{
+            this.client.users.cache.get(userID).send("Lucky bastard...")
+            this.sendQuestion(userID)
+        }
+    }
+
+    wrongAnswer(userID){
+        this.client.users.cache.get(userID).send("Lmao you fucking retard... you actually got that wrong?")
+        this.sendQuestion(userID)
+    }
+
+    finishQuiz(userID){
+        this.client.users.cache.get(userID).send("Congrats you fucking aced the fuck out of that quiz!")
+        this.currentQuiztakers[userID] = null;
+    }
+
     /**
      * Takes userID and answer and checks if it correct
      * @param {*} userID 
      * @param {*} answer 
      */
     checkAnswer(userID, answer){
-
+        if(this.currentQuiztakers[userID].question.answer === answer){
+            this.correctAnswer(userID)
+        }else{
+            this.wrongAnswer(userID)
+        }
     }
 
     /**
@@ -63,11 +86,12 @@ class Quizzer{
      * @param {userID is the id of the user to give the quiz to} userID 
      */
     async startQuiz(userID){
-        let question = await this.getNextQuestion();
+        
         //need to get old roles and store
         //then restore on finish quiz
+
         this.currentQuiztakers[userID] = {
-            question: question,
+            question: null,
             correct: 0,
             firstQuestion: true,
         }
@@ -75,10 +99,13 @@ class Quizzer{
     }
 
     /**
-     * Takes a userID and sends them their current question
+     * Takes a userID and stores their question and sends it to them
      * @param {*} userID 
      */
     async sendQuestion(userID){
+        let question = await this.getQuestionFromAPI();
+        this.currentQuiztakers[userID].question = question;
+
         let message = '';
         if(this.currentQuiztakers[userID].firstQuestion){
             
@@ -114,7 +141,7 @@ class Quizzer{
 
     }
 
-    async getNextQuestion () {
+    async getQuestionFromAPI () {
         let resp = await fetch("https://opentdb.com/api.php?amount=1",);
         resp = await resp.json();
         let questionObj = resp.results[0];

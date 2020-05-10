@@ -11,6 +11,7 @@ const Quizzer = require('./quizzer.js')
 let quizzer;
 
 // const SAFE_SPACE_CHANNEL_ID = 247897731551592448;
+// const DM_CHANNEL_ID = 671046362783154224
 
 var question2 = "";
 var answer = "";
@@ -144,6 +145,11 @@ client.on('message', async function(msg) {
                     sendquestion = await createQuestionsForUsers(newquestion[0], newquestion[1], newquestion[2], accounts[i].correctQuestions, accounts[i].username);
                 }
             };
+        }
+        //start of new quiz logic
+        let userID = msg.author.id;
+        if(quizzer.isTakingQuiz(userID)){
+            quizzer.checkAnswer(userID, msg.content)
         }
     }
     //new if then to determine if it is an image or a phrase based on command entered
