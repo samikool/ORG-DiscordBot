@@ -14,15 +14,10 @@ var getvalues = [];
 var newquestion = [];
 var quizsent = '';
 
-
-
-
 var QTmembers = "";
 var accounts = [];
 var values = [];
 var firstquestion = true;
-
-
 
 possibleCommands = ['!jackiejthejackhammer', '!trey', '!ben', '!reserve', '!interchange', '!shoreline', '!labs', 
 '!factory', '!customs', '!woods', '!dorms', '!resort', '!labs', '!ammo', '!roll', '!help', '!whattrey', '!bdawg', '!handitrey', '!quiz', '!quizme']
@@ -38,85 +33,63 @@ responses = {
 //make sure images are in their own folder 
 imagedirectory = fs.readdirSync('C:/Users/benhi/Documents/GitHub/Discord-Files/images');
 
-
-
-
-
-
-
-
-
 // console.log(currentTime)
 // console.log(setTime)
 
 
 client.on('message', async function(msg) {
     //if(!msg.content.startsWith('!')){return;}
-
     if (msg.content.startsWith('!')) {
         var command = msg.content.toLowerCase().split(' ')[0];
     } else {
         for (i = 0; i < accounts.length; i++) {
-        if (msg.author.id == accounts[i].username) {
-            console.log(msg.content);
+            if (msg.author.id == accounts[i].username) {
+                console.log(msg.content);
 
-            console.log(msg.author.id);
-            console.log(accounts[i].username);
-    
-            if (msg.content.toLowerCase() == accounts[i].answer.toLowerCase()) {
-                accounts[i].correctQuestions++;
-                console.log("Number of questions correct is " + accounts[i].correctQuestions); 
-                firstquestion = false;
-
-
-                if (accounts[i].correctQuestions >= 3) {
-                    client.users.cache.get(accounts[i].username).send("Congrats you fucking aced the fuck out of that quiz!");
-                    const guild = client.guilds.cache.get("703672376109432892");
-                    var member = guild.members.cache.get(accounts[i].username);
-                    member.roles.add('704088583853572191');
-                    member.roles.remove('703726754065547415');
-                    accounts[i].correctQuestions = 0;
+                console.log(msg.author.id);
+                console.log(accounts[i].username);
+        
+                if (msg.content.toLowerCase() == accounts[i].answer.toLowerCase()) {
+                    accounts[i].correctQuestions++;
+                    console.log("Number of questions correct is " + accounts[i].correctQuestions); 
+                    firstquestion = false;
 
 
+                    if (accounts[i].correctQuestions >= 3) {
+                        client.users.cache.get(accounts[i].username).send("Congrats you fucking aced the fuck out of that quiz!");
+                        const guild = client.guilds.cache.get("703672376109432892");
+                        var member = guild.members.cache.get(accounts[i].username);
+                        member.roles.add('704088583853572191');
+                        member.roles.remove('703726754065547415');
+                        accounts[i].correctQuestions = 0;
 
 
 
 
-                }else {
+
+
+                    }else {
+                        newquestion = await getNextQuestion();
+                        console.log(newquestion);
+                        sendquestion = await createQuestionsForUsers(newquestion[0], newquestion[1], newquestion[2], accounts[i].correctQuestions, accounts[i].username);
+                    }
+                }
+                else {
+                    console.log("Number of questions correct is " + accounts[i].correctQuestions)
+                    firstquestion = false;
                     newquestion = await getNextQuestion();
                     console.log(newquestion);
                     sendquestion = await createQuestionsForUsers(newquestion[0], newquestion[1], newquestion[2], accounts[i].correctQuestions, accounts[i].username);
                 }
-
-                
-
-    
-               
-    
-            }
-            else {
-                console.log("Number of questions correct is " + accounts[i].correctQuestions)
-                firstquestion = false;
-                newquestion = await getNextQuestion();
-                console.log(newquestion);
-                sendquestion = await createQuestionsForUsers(newquestion[0], newquestion[1], newquestion[2], accounts[i].correctQuestions, accounts[i].username);
-            }
-        };
+            };
+        }
     }
-    }
-
-    
-
-
     //new if then to determine if it is an image or a phrase based on command entered
     if (possibleCommands.includes(command) == true) {
         console.log("The command was " + command);
         command2 = command.substring(1);
-
         if (imagedirectory.includes(command2 + ".png")) {
             msg.channel.send({files: ["./images/" + command2 + ".png"]});
-
-
         }else if(command == '!roll'){
             console.log("ROLLING!");
             var random = Math.random();
@@ -124,10 +97,8 @@ client.on('message', async function(msg) {
             if(random < 0.5){
                 msg.channel.send("Heads");
             }else{
-                msg.channel.send("Tails");}
-
-
-
+                msg.channel.send("Tails");
+            }
         }else if(command == '!quizme'){
             console.log(msg.author.id);
             console.log(msg.member.roles.find(r => r.name === "Triggerd Shit Lord"));
@@ -145,17 +116,10 @@ client.on('message', async function(msg) {
         }  
         //this one has to be last
         else if (responses[command2] == responses[command2]) {
-        msg.channel.send(responses[command2]);
-        
-        
+            msg.channel.send(responses[command2]);
+        }
     }
-}
-
 });
-
-
-
-
 
 client.on('ready', async function ()  {
 
@@ -163,44 +127,28 @@ client.on('ready', async function ()  {
     setInterval(() => {
         if (checkTime2() == true) {
             quizsent = false;
-         }
-
-
+        }
         if (quizsent == true) {
             console.log("quizes already sent")
         } else {
-           
             if (checkTime() == true) {
-        
                 startquiz();
-    
                 quizsent = true;
-    
             }
         }
       }, 15000); // this is mesaured in milliseconds (15 seconds)
-
 });
-
-
-
 
 // ################################################# FUNCTIONS FOR THE QUIZ BOT ################################################
 
 async function getNextQuestion () {
     try {
         await fetch("https://opentdb.com/api.php?amount=1").then((resp) => resp.json()).then(async function(data) {
-
             var obj = data.results[0];
-    
             question = obj.question.replace(/&#039;/g, "\'");
-    
             question2 = question.replace(/&quot;/g, "\"");
-    
             answer = obj.correct_answer;
-    
             category = obj.category;
-    
             values = [category, question2, answer];
         })
     }
@@ -210,13 +158,7 @@ async function getNextQuestion () {
     return values
 }    
     
-    
-
-
-
-
 async function getQTMembers() {
-    
     const guild = client.guilds.cache.get("703672376109432892");
     QTmembers = guild.roles.cache.get('704088583853572191').members.map(m=>m.user.id);
     console.log(QTmembers);
@@ -225,10 +167,7 @@ async function getQTMembers() {
         member.roles.add("703726754065547415")
         member.roles.remove("704088583853572191")
     }
-
 }
-
-
 
 async function createQuestionsForUsers(category, question, answer, correctQuestions, userid) {
     if (firstquestion == true) {
@@ -245,8 +184,7 @@ async function createQuestionsForUsers(category, question, answer, correctQuesti
             console.log("The first question if statmement happend")
             //Send the question to the user
             client.users.cache.get(accounts[i].username).send("The category is " + accounts[i].category + "\n" + "Question: " + accounts[i].userquestion);
-    }
-    
+        }
     } else if (firstquestion == false) {
         for (i = 0; i < accounts.length; i++) {
             console.log("The user id is " + userid);
@@ -265,17 +203,9 @@ async function createQuestionsForUsers(category, question, answer, correctQuesti
             
     
             
+        }
     }
-    }
-
-
-
-
-
-
-
 }
-
 
 async function startquiz() {
     getQTMembers();
@@ -289,11 +219,6 @@ async function startquiz() {
     
 
 }
-
-
-
-
-
 // Checks for 5PM
 function checkTime() {
     var currentTime = moment().format("HH:mm");
