@@ -2,15 +2,15 @@ require('dotenv').config()
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
+
 const fs = require('fs');
 const moment = require("moment");
-const fetch = require("node-fetch");
+
 
 const Quizzer = require('./quizzer.js')
-const quizzer = new Quizzer(Discord, client);
+let quizzer;
 
-
-
+// const SAFE_SPACE_CHANNEL_ID = 247897731551592448;
 
 var question2 = "";
 var answer = "";
@@ -42,12 +42,73 @@ imagedirectory = fs.readdirSync('E:/git/TarkovDiscordbot/Images');
 // console.log(currentTime)
 // console.log(setTime)
 
+/**
+ * Function is first event called by discordBot
+ * Initializing stuff goes here
+ */
+client.on('ready', async function ()  {
+    console.log(`Logged in as ${client.user.tag}!`);
+    quizzer = new Quizzer(Discord, client);
+    
+    // const guild = client.guilds.cache.get("247897731551592448");
+    // console.log(guild)
+    //Checks for 5PM every hour
+    setInterval(() => {
+        if (checkTime2() == true) {
+            quizsent = false;
+        }
+        if (quizsent == true) {
+            console.log("quizes already sent")
+        } else {
+            if (checkTime() == true) {
+                startquiz();
+                quizsent = true;
+            }
+        }
+      }, 5000); // this is mesaured in milliseconds (15 seconds)
+});
 
 client.on('message', async function(msg) {
-    //if(!msg.content.startsWith('!')){return;}
-    if (msg.content.startsWith('!')) {
+    
+    //if message is from chat channel
+    if (msg.channel.type === 'text' && msg.content.startsWith('!')) {
         var command = msg.content.toLowerCase().split(' ')[0];
-    } else {
+        if (possibleCommands.includes(command)) {
+            console.log("The command was " + command);
+            command2 = command.substring(1);
+            if (imagedirectory.includes(command2 + ".png")) {
+                msg.channel.send({files: ["./images/" + command2 + ".png"]});
+            }else if(command == '!roll'){
+                console.log("ROLLING!");
+                var random = Math.random();
+                console.log(random);
+                if(random < 0.5){
+                    msg.channel.send("Heads");
+                }else{
+                    msg.channel.send("Tails");
+                }
+            }else if(command == '!quiz'){
+                //not working
+                console.log(msg.mentions.members.first().id);
+                quizzer.startQuiz(msg.mentions.members.first().id)
+            }
+            else if (command == '!help'){
+                commands = '';
+                for(i=0; i<possibleCommands.length; i++){
+                    commands += possibleCommands[i];
+                    if(i != possibleCommands.length){
+                        commands += ', ';
+                    }
+                }
+                console.log('Sending commands for ' + msg.author.username);
+                msg.channel.send('Possible commands are: ' + commands);
+            }  
+            //this one has to be last
+            else if (responses[command2] == responses[command2]) {
+                msg.channel.send(responses[command2]);
+            }
+        }
+    }else {
         console.log(accounts)
         for (i = 0; i < accounts.length; i++) {
             if (msg.author.id == accounts[i].username) {
@@ -86,62 +147,9 @@ client.on('message', async function(msg) {
         }
     }
     //new if then to determine if it is an image or a phrase based on command entered
-    if (possibleCommands.includes(command)) {
-        console.log("The command was " + command);
-        command2 = command.substring(1);
-        if (imagedirectory.includes(command2 + ".png")) {
-            msg.channel.send({files: ["./images/" + command2 + ".png"]});
-        }else if(command == '!roll'){
-            console.log("ROLLING!");
-            var random = Math.random();
-            console.log(random);
-            if(random < 0.5){
-                msg.channel.send("Heads");
-            }else{
-                msg.channel.send("Tails");
-            }
-        }else if(command == '!quizme'){
-            //not working
-            console.log(msg.author.id);
-            console.log(msg.member.roles.find(r => r.name === "Triggerd Shit Lord"));
-        }
-        else if (command == '!help'){
-            commands = '';
-            for(i=0; i<possibleCommands.length; i++){
-                commands += possibleCommands[i];
-                if(i != possibleCommands.length){
-                    commands += ', ';
-                }
-            }
-            console.log('Sending commands for ' + msg.author.username);
-            msg.channel.send('Possible commands are: ' + commands);
-        }  
-        //this one has to be last
-        else if (responses[command2] == responses[command2]) {
-            msg.channel.send(responses[command2]);
-        }
-    }
 });
 
 
-
-client.on('ready', async function ()  {
-
-    //Checks for 5PM every hour
-    setInterval(() => {
-        if (checkTime2() == true) {
-            quizsent = false;
-        }
-        if (quizsent == true) {
-            console.log("quizes already sent")
-        } else {
-            if (checkTime() == true) {
-                startquiz();
-                quizsent = true;
-            }
-        }
-      }, 5000); // this is mesaured in milliseconds (15 seconds)
-});
 
 // ################################################# FUNCTIONS FOR THE QUIZ BOT ################################################
 
@@ -164,6 +172,7 @@ async function getNextQuestion () {
     
 async function getQTMembers() {
     const guild = client.guilds.cache.get("247897731551592448");
+    console.log(guild)
     QTmembers = guild.roles.cache.get('708857911446601770').members.map(m=>m.user.id);
     console.log(QTmembers);
     for (i = 0; i < QTmembers.length; i++) {
@@ -271,6 +280,4 @@ client.login(process.env.TOKEN);
     // var guild2 = client.guilds.cache.get("703672376109432892");
     // const role = guild2.roles.cache.find(guild2 => guild2.name === 'Quiz Takers');
     // console.log(role)
-
-
 
