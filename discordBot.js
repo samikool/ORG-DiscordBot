@@ -54,7 +54,6 @@ client.on('message', async function(msg) {
                     console.log("Number of questions correct is " + accounts[i].correctQuestions); 
                     firstquestion = false;
 
-
                     if (accounts[i].correctQuestions >= 3) {
                         client.users.cache.get(accounts[i].username).send("Congrats you fucking aced the fuck out of that quiz!");
                         const guild = client.guilds.cache.get("703672376109432892");
@@ -62,12 +61,6 @@ client.on('message', async function(msg) {
                         member.roles.add('704088583853572191');
                         member.roles.remove('703726754065547415');
                         accounts[i].correctQuestions = 0;
-
-
-
-
-
-
                     }else {
                         newquestion = await getNextQuestion();
                         console.log(newquestion);
