@@ -1,2 +1,2 @@
 echo starting server...
-E:\git\TarkovDiscordMaster node discordBot.js
+start node E:\git\TarkovDiscordMaster\discordBot.js
