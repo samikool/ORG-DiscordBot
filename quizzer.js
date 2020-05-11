@@ -11,6 +11,7 @@ class Quizzer{
         this.currentQuiztakers = {};
         
         this.startUpdateQuiztakerInterval()
+        this.giveTestPermissions("379844352714997761");
     }
     /**
      * Function sets intervald to store people in quiztaker role in the quiztakers map
@@ -148,10 +149,8 @@ class Quizzer{
     async giveTestPermissions(userID){
         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
         member.roles.add(TRIGGERED_SHIT_LORD_ROLE_ID)
-        
-        try{ await member.voice.setMute(true) }
-        catch(e){ console.log('User is not connected to voice chat') }
-        
+
+        if(member.voice.channelID) member.voice.setMute(true)
     }
 
     /**
