@@ -170,7 +170,7 @@ class Quizzer{
         })
 
         //unmute
-        member.voice.setMute(false)
+        if(member.voice.channelID) member.voice.setMute(false)
     }
 
     /**
