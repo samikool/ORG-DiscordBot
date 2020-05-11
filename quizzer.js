@@ -11,8 +11,11 @@ class Quizzer{
         this.currentQuiztakers = {};
         
         this.startUpdateQuiztakerInterval()
-    }
 
+        let member = this.client.guilds.resolve(SERVER_ID).members.cache.get("379844352714997761");
+
+        
+    }
     /**
      * Function sets intervald to store people in quiztaker role in the quiztakers map
      */
@@ -54,7 +57,7 @@ class Quizzer{
      * @param {*} userID 
      * @param {*} answer 
      */
-    checkAnswer(userID, answer){
+    async checkAnswer(userID, answer){
         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
         if(this.currentQuiztakers[userID].question.answer.toLowerCase() === answer.toLowerCase()){
             this.correctAnswer(userID)
@@ -71,7 +74,7 @@ class Quizzer{
      * If not it calls @sendQuestion to send them another question
      * @param {} userID 
      */
-    correctAnswer(userID){
+    async correctAnswer(userID){
         this.currentQuiztakers[userID].correct += 1;
         if(this.currentQuiztakers[userID].correct === 3){
             this.finishQuiz(userID)
@@ -86,7 +89,7 @@ class Quizzer{
      * They will be insulted and then sent another question
      * @param {*} userID 
      */
-    wrongAnswer(userID){
+    async wrongAnswer(userID){
         this.client.users.cache.get(userID).send("Lmao you fucking retard... you actually got that wrong?")
         this.sendQuestion(userID)
     }
@@ -95,7 +98,7 @@ class Quizzer{
      * Takes a userID and calls the functions necessary to start giving them a quiz
      * @param {*} userID is the user id of the user
      */
-    startQuiz(userID){
+    async startQuiz(userID){
         //set up current quiztaker object
         this.currentQuiztakers[userID] = {
             question: null,
@@ -114,7 +117,7 @@ class Quizzer{
      * Function takes a userID and 
      * @param {*} userID is the user id of the user 
      */
-    finishQuiz(userID){
+    async finishQuiz(userID){
         //restire their permissions
         this.restorePermissions(userID);
         //congradulate/insult them
@@ -127,16 +130,18 @@ class Quizzer{
      * Function takes a userID and saves the users current roles and then takes them away
      * @param {*} userID 
      */
-    takePermissions(userID){
+    async takePermissions(userID){
         //get member
         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
         //get their roles (string of role id)
         let roles = member._roles;
+        
         //save roles
         this.currentQuiztakers[userID].roles = roles;
         //for each role remove it
         roles.forEach((role) => {
-            member.roles.remove(role);
+        try{member.roles.remove(role);}
+        catch(e){console.log('user not connected to chat');}
             
         })
     }
@@ -145,7 +150,7 @@ class Quizzer{
      * Function takes a userID and adds them to the triggered shit lord group and mutes them
      * @param {*} userID 
      */
-    giveTestPermissions(userID){
+    async giveTestPermissions(userID){
         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
         member.roles.add(TRIGGERED_SHIT_LORD_ROLE_ID)
         member.voice.setMute(true);
@@ -155,7 +160,7 @@ class Quizzer{
      * Function takes a userID and restores their permissions that were saved before the test was started 
      * @param {*} userID 
      */
-    restorePermissions(userID){
+    async restorePermissions(userID){
         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
 
         //remove truggered shit lord
