@@ -55,10 +55,13 @@ class Quizzer{
      * @param {*} answer 
      */
     checkAnswer(userID, answer){
+        let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
         if(this.currentQuiztakers[userID].question.answer.toLowerCase() === answer.toLowerCase()){
             this.correctAnswer(userID)
+            console.log(member.displayName + " answered a question correctly")
         }else{
             this.wrongAnswer(userID)
+            console.log(member.displayName + " answered a question incorrectly")
         }
     }
 

@@ -59,7 +59,7 @@ client.on('ready', async function ()  {
             quizsent = false;
         }
         if (quizsent == true) {
-            console.log("quizes already sent")
+            //console.log("quizes already sent")
         } else {
             if (checkTime() == true) {
                 startquiz();
@@ -236,10 +236,10 @@ function checkTime() {
     var currentTime = moment().format("HH:mm");
     var setTime = moment().format("17:00");
     if (currentTime >= setTime) {
-        console.log("Time has passed");
+        //console.log("Time has passed");
         return true
     } else if (currentTime <= setTime) {
-        console.log("Time has not occured yet");
+        //console.log("Time has not occured yet");
         return false
     }
 }
@@ -249,10 +249,10 @@ function checkTime2() {
     var currentTime = moment().format("HH:mm");
     var setTime = moment().format("05:00");
     if (currentTime <= setTime) {
-        console.log("Time has passed");
+        //console.log("Time has passed");
         return true
     } else if (currentTime >= setTime) {
-        console.log("Time has not occured yet");
+        //console.log("Time has not occured yet");
         return false
     }
 }
