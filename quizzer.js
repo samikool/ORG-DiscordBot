@@ -1,3 +1,4 @@
+const moment = require("moment");
 const SERVER_ID = "247897731551592448";
 const QUIZ_TAKER_ROLE_ID = "708857911446601770";
 const TRIGGERED_SHIT_LORD_ROLE_ID = "296103466844028928";
@@ -11,7 +12,6 @@ class Quizzer{
         this.currentQuiztakers = {};
         
         this.startUpdateQuiztakerInterval()
-        this.giveTestPermissions("379844352714997761");
     }
     /**
      * Function sets intervald to store people in quiztaker role in the quiztakers map
@@ -19,8 +19,13 @@ class Quizzer{
     async startUpdateQuiztakerInterval(){
         this.client.setInterval(async () => {
             let guild = await this.client.guilds.cache.get(SERVER_ID);
+
+
             guild.roles.cache.get(QUIZ_TAKER_ROLE_ID).members.forEach((user) => {
-                this.quiztakers[user.id] = {};
+                
+                this.quiztakers[user.id] = {
+
+                };
             })
         }, 5000);
     }
@@ -150,6 +155,7 @@ class Quizzer{
         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
         member.roles.add(TRIGGERED_SHIT_LORD_ROLE_ID)
 
+        //mute if incase they aren't connected to chat
         if(member.voice.channelID) member.voice.setMute(true)
     }
 
