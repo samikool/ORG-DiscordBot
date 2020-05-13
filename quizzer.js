@@ -60,14 +60,15 @@ class Quizzer{
      * @param {*} answer 
      */
     async checkAnswer(userID, answer){
+        let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
         //secret code to get out of quiz
         if(answer.toLowerCase() === 'trey is a pussy'){
             console.log(member.displayName + " typed the secret code")
             this.finishQuiz(userID)
             return
+
         }
 
-        let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
         if(this.currentQuiztakers[userID].question.answer.toLowerCase() === answer.toLowerCase()){
             this.correctAnswer(userID)
             console.log(member.displayName + " answered a question correctly")
