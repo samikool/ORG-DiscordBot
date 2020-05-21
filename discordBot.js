@@ -235,7 +235,7 @@ function checkTime() {
         //console.log("Time has passed");
         return true
     } else if (currentTime <= setTime) {
-        //console.log("Time has not occured yet");
+
         return false
     }
 }
