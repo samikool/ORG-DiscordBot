@@ -73,7 +73,7 @@ client.on('message', async function(msg) {
             console.log("The command was " + command);
             command2 = command.substring(1);
             if (imagedirectory.includes(command2 + ".png")) {
-                msg.channel.send({files: ["./images/" + command2 + ".png"]});
+                msg.channel.send({files: [__dirname+"/images/" + command2 + ".png"]});
             }else if(command == '!roll'){
                 console.log("ROLLING!");
                 var random = Math.random();
@@ -84,7 +84,7 @@ client.on('message', async function(msg) {
                     msg.channel.send("Tails");
                 }
             }else if(command == '!quiz'){
-                quizzer.startQuiz(msg.mentions.members.first().id) 
+                quizzer.startQuiz(msg.mentions.members.first().id)
             }
             else if (command == '!help'){
                 commands = '';
