@@ -253,25 +253,17 @@ function checkTime2() {
     }
 }
 
-//console.log(process)
-let connected = false;
-
-//loop retrys to connect until it connects
-while(!connected){
-  
-    console.log("8");
-    client.login(process.env.TOKEN)
-    .then(() => {
-        console.log("9");
-        connected = true;
-    })
-    .catch((e) => {
-        connected = false;
-        console.log("8.5");
-        console.log('retrying to connect...');
-    });
+console.log("8");
+client.login(process.env.TOKEN)
+.then(() => {
+    console.log("9");
+})
+.catch((e) => {
+    console.log("8.5");
+    console.log('retrying to connect...');
+});
         
-}
+
 console.log("10")
 
 
