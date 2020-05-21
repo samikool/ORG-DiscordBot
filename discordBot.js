@@ -1,14 +1,17 @@
 require('dotenv').config({path: __dirname+'/.env'})
-
+console.log("1");
 const Discord = require('discord.js');
-
+console.log("2");
 const fs = require('fs');
+console.log("3");
 const moment = require("moment");
+console.log("4");
 const fetch = require("node-fetch");
-
+console.log("5");
 const Quizzer = require('./quizzer.js');
+console.log("6");
 const client = new Discord.Client();
-
+console.log("7");
 
 let quizzer;
 
@@ -256,12 +259,16 @@ let connected = false;
 //loop retrys to connect until it connects
 while(!connected){
     try{
+	console.log("8");
         client.login(process.env.TOKEN);
         connected = true;
     }catch(e){
+	connected = false;
+	console.log("8.5");
         console.log('retrying to connect...');
     }
 }
+console.log("9");
 
 
 
