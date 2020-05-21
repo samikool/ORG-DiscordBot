@@ -35,8 +35,8 @@ responses = {
     trey: "Fuck Trey",
 }
 
-//this gets current directory at any point
-imagedirectory = fs.readdirSync('./images');
+//this gets current directory of the js file 
+imagedirectory = fs.readdirSync(__dirname+'/images');
 
 
 /**
