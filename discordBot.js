@@ -1,13 +1,26 @@
 require('dotenv').config({path: __dirname+'/.env'})
 
 const Discord = require('discord.js');
-const client = new Discord.Client();
 
 const fs = require('fs');
 const moment = require("moment");
 const fetch = require("node-fetch");
 
-const Quizzer = require('./quizzer.js')
+const Quizzer = require('./quizzer.js');
+
+let connected = false;
+let client;
+
+//loop retrys to connect until it connects
+while(!connected){
+    try{
+        client = new Discord.Client();
+        connected = true;
+    }catch(e){
+        console.log('retrying to connect...');
+    }
+}
+
 let quizzer;
 
 // const SAFE_SPACE_CHANNEL_ID = 247897731551592448;
