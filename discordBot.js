@@ -263,7 +263,7 @@ function login(){
         console.log(e)
         console.log("8.5");
         console.log('retrying to connect...');
-        setTimeout(login(), 5000);
+        setTimeout(login, 5000);
     });
 }
 
