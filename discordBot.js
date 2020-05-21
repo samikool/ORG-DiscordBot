@@ -35,13 +35,9 @@ responses = {
     trey: "Fuck Trey",
 }
 
-//images in array format
-//change the directory for master to where the images are stored on your computer (pretty sure you have to use exact path)
-//make sure images are in their own folder 
-//imagedirectory = fs.readdirSync('C:/Users/benhi/Documents/GitHub/Discord-Files/images');
-imagedirectory = fs.readdirSync('E:/git/TarkovDiscordbot/Images');
-// console.log(currentTime)
-// console.log(setTime)
+//this gets current directory at any point
+imagedirectory = fs.readdirSync('./Images');
+
 
 /**
  * Function is first event called by discordBot
