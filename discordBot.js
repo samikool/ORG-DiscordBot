@@ -36,7 +36,7 @@ responses = {
 }
 
 //this gets current directory at any point
-imagedirectory = fs.readdirSync('./Images');
+imagedirectory = fs.readdirSync('./images');
 
 
 /**
