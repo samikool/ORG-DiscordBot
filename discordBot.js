@@ -7,19 +7,8 @@ const moment = require("moment");
 const fetch = require("node-fetch");
 
 const Quizzer = require('./quizzer.js');
+const client = new Discord.Client();
 
-let connected = false;
-let client;
-
-//loop retrys to connect until it connects
-while(!connected){
-    try{
-        client = new Discord.Client();
-        connected = true;
-    }catch(e){
-        console.log('retrying to connect...');
-    }
-}
 
 let quizzer;
 
@@ -262,7 +251,19 @@ function checkTime2() {
 }
 
 //console.log(process)
-client.login(process.env.TOKEN);
+let connected = false;
+
+//loop retrys to connect until it connects
+while(!connected){
+    try{
+        client.login(process.env.TOKEN);
+        connected = true;
+    }catch(e){
+        console.log('retrying to connect...');
+    }
+}
+
+
 
 
 // ################################################### NOTES #########################################################
