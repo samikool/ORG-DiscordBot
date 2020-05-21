@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({path: __dirname+'/.env'})
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -248,7 +248,7 @@ function checkTime2() {
     }
 }
 
-
+//console.log(process)
 client.login(process.env.TOKEN);
 
 
