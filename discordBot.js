@@ -258,17 +258,21 @@ let connected = false;
 
 //loop retrys to connect until it connects
 while(!connected){
-    try{
-	console.log("8");
-        client.login(process.env.TOKEN);
+  
+    console.log("8");
+    client.login(process.env.TOKEN)
+    .then(() => {
+        console.log("9");
         connected = true;
-    }catch(e){
-	connected = false;
-	console.log("8.5");
+    })
+    .catch((e) => {
+        connected = false;
+        console.log("8.5");
         console.log('retrying to connect...');
-    }
+    });
+        
 }
-console.log("9");
+console.log("10")
 
 
 
@@ -289,4 +293,3 @@ console.log("9");
     // var guild2 = client.guilds.cache.get("703672376109432892");
     // const role = guild2.roles.cache.find(guild2 => guild2.name === 'Quiz Takers');
     // console.log(role)
-
