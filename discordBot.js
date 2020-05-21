@@ -253,19 +253,21 @@ function checkTime2() {
     }
 }
 
-console.log("8");
-client.login(process.env.TOKEN)
-.then(() => {
-    console.log("9");
-})
-.catch((e) => {
-    console.log("8.5");
-    console.log('retrying to connect...');
-});
-        
+function login(){
+    console.log("8");
+    client.login(process.env.TOKEN)
+    .then(() => {
+        console.log("9");
+    })
+    .catch((e) => {
+        console.log(e)
+        console.log("8.5");
+        console.log('retrying to connect...');
+        setTimeout(login(), 5000);
+    });
+}
 
-console.log("10")
-
+login()
 
 
 
