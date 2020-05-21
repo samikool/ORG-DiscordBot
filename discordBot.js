@@ -106,11 +106,6 @@ client.on('message', async function(msg) {
         //console.log(accounts)
         for (i = 0; i < accounts.length; i++) {
             if (msg.author.id == accounts[i].username) {
-                //console.log(msg.content);
-
-                //console.log(msg.author.id);
-                //console.log(accounts[i].username);
-        
                 if (msg.content.toLowerCase() == accounts[i].answer.toLowerCase()) {
                     accounts[i].correctQuestions++;
                     console.log("Number of questions correct is " + accounts[i].correctQuestions); 
