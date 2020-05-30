@@ -5,8 +5,8 @@ const fs = require('fs');
 const moment = require("moment");
 const fetch = require("node-fetch");
 const Quizzer = require('./quizzer.js');
-const client = new Discord.Client();
-
+const client = new Discord.Client({autoReconnect: true});
+ 
 let quizzer;
 
 // const SAFE_SPACE_CHANNEL_ID = 247897731551592448;
