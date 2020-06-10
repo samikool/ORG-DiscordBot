@@ -5,7 +5,7 @@ const fs = require('fs');
 const moment = require("moment");
 const fetch = require("node-fetch");
 const Quizzer = require('./quizzer.js');
-const client = new Discord.Client({autoReconnect: true});
+const client = new Discord.Client({autoReconnect:true});
  
 let quizzer;
 
@@ -26,7 +26,7 @@ var firstquestion = true;
 
 
 possibleCommands = ['!jackiejthejackhammer', '!trey', '!ben', '!reserve', '!interchange', '!shoreline', '!labs', 
-'!factory', '!customs', '!woods', '!dorms', '!resort', '!labs', '!ammo', '!roll', '!help', '!whattrey', '!bdawg', '!handitrey', '!quiz', '!quizme']
+'!factory', '!customs', '!woods', '!dorms', '!resort', '!labs', '!ammo', '!keys', '!roll', '!help', '!whattrey', '!bdawg', '!handitrey', '!quiz', '!quizme']
 
 //phrases go here
 responses = {
@@ -36,7 +36,6 @@ responses = {
 
 //this gets current directory of the js file 
 imagedirectory = fs.readdirSync(__dirname+'/images');
-
 
 /**
  * Function is first event called by discordBot
