@@ -141,7 +141,9 @@ client.on('message', async function(msg) {
     //new if then to determine if it is an image or a phrase based on command entered
 });
 
-
+client.on('error', async function(error){
+    console.log(error);
+});
 
 // ################################################# FUNCTIONS FOR THE QUIZ BOT ################################################
 
