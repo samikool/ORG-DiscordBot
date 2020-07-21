@@ -25,8 +25,39 @@ var values = [];
 var firstquestion = true;
 
 
-possibleCommands = ['!jackiejthejackhammer', '!trey', '!ben', '!reserve', '!interchange', '!shoreline', '!labs', 
-'!factory', '!customs', '!woods', '!dorms', '!resort', '!labs', '!ammo', '!keys', '!roll', '!help', '!whattrey', '!bdawg', '!handitrey', '!quiz', '!quizme']
+possibleCommands = [
+    //tarkov
+    '!reserve',
+    '!interchange',
+    '!shoreline',
+    '!labs',
+    '!factory',
+    '!customs',
+    '!woods',
+    '!resort',
+    '!dorms',
+    '!labs',
+    '!ammo',
+    '!keys',
+    '!hideout',
+    '!questitems',
+    //quiz
+    '!quiz',
+    '!quizme',
+    //fun
+    '!handitrey',
+    '!jackiejthejackhammer',
+    '!trey',
+    '!ben',
+    '!tickletime',
+    '!samisretarded',
+    '!bdawg',
+    '!whattrey',
+    //utils
+    '!roll',
+    '!ping',
+    '!help'
+]
 
 //phrases go here
 responses = {
@@ -84,7 +115,14 @@ client.on('message', async function(msg) {
             }else if(command == '!quiz'){
                 quizzer.startQuiz(msg.mentions.members.first().id)
             }
-            else if (command == '!help'){
+            else if(command == '!samisretarded'){
+                msg.channel.send('!handitrey')
+                msg.channel.send('!whattrey')
+            }
+            else if(command == '!ping'){
+                msg.channel.send('pong')
+            }
+            else if(command == '!help'){
                 commands = '';
                 for(i=0; i<possibleCommands.length; i++){
                     commands += possibleCommands[i];
