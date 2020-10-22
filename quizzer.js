@@ -100,7 +100,7 @@ class Quizzer{
      * @param {*} userID 
      */
     async wrongAnswer(userID){
-        this.client.users.cache.get(userID).send("Lmao you fucking retard... you actually got that wrong?")
+        this.client.users.cache.get(userID).send("Lmao... you actually got that wrong?")
         this.sendQuestion(userID)
     }
 
@@ -119,7 +119,7 @@ class Quizzer{
         this.takePermissions(userID);
         //give them the testtaker permissions
         this.giveTestPermissions(userID);
-        //semd them a question
+        //send them a question
         this.sendQuestion(userID)
     }
 
@@ -131,7 +131,7 @@ class Quizzer{
         //restire their permissions
         this.restorePermissions(userID);
         //congradulate/insult them
-        this.client.users.cache.get(userID).send("Congrats you fucking aced the fuck out of that quiz!")
+        this.client.users.cache.get(userID).send("Congrats you actually managed to pass a quiz for once!")
         //remove them from currentquizztaker map
         delete this.currentQuiztakers[userID]
     }

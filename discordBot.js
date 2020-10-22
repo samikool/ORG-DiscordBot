@@ -53,6 +53,8 @@ possibleCommands = [
     '!samisretarded',
     '!bdawg',
     '!whattrey',
+    '!needcarried',
+    '!pleasecarry',
     //utils
     '!roll',
     '!ping',
