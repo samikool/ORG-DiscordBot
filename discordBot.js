@@ -55,6 +55,10 @@ possibleCommands = [
     '!whattrey',
     '!needcarried',
     '!pleasecarry',
+    '!nidgod',
+    '!truecarry',
+    '!texasproof',
+    '!texastwins',
     //utils
     '!roll',
     '!ping',
@@ -115,9 +119,18 @@ client.on('message', async function(msg) {
                     msg.channel.send("Tails");
                 }
             }else if(command == '!quiz'){
-                quizzer.startQuiz(msg.mentions.members.first().id)
+                if(msg.author.id == "658888119114006538"){
+                    msg.channel.send("Sorry, we dont\'t allow people with the name Tim to quiz.... :(");
+                    msg.channel.send("Please be sure to file a complaint with our admins if this continues to be a problem.");
+                }
+                else if(msg.mentions.members.first().id == "379844352714997761" || msg.mentions.members.first().id == "247897498104889345"){
+                    msg.channel.send('You can\'t quiz them, they are better than you...')
+                }else{
+                    quizzer.startQuiz(msg.mentions.members.first().id)
+                }
+                
             }
-            else if(command == '!samisretarded'){
+            else if(command == '!samisretarded'){2
                 msg.channel.send('!handitrey')
                 msg.channel.send('!whattrey')
             }
