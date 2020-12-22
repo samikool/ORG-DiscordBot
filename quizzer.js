@@ -3,7 +3,7 @@ const SERVER_ID = "247897731551592448";
 const QUIZ_TAKER_ROLE_ID = "708857911446601770";
 const TRIGGERED_SHIT_LORD_ROLE_ID = "296103466844028928";
 const fetch = require("node-fetch");
-//hello
+
 class Quizzer{
     constructor(Discord, client){
         this.Discord = Discord;
