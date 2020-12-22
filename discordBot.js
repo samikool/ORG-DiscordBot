@@ -24,6 +24,7 @@ var accounts = [];
 var values = [];
 var firstquestion = true;
 
+//testing
 possibleCommands = [
     //tarkov
     '!reserve',
