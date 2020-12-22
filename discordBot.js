@@ -25,6 +25,7 @@ var values = [];
 var firstquestion = true;
 
 
+//list of commands
 possibleCommands = [
     //tarkov
     '!reserve',
