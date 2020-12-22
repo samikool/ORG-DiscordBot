@@ -9,7 +9,7 @@ const client = new Discord.Client({autoReconnect:true});
  
 let quizzer;
 
-// const SAFE_SPACE_CHANNEL_ID = 247897731551592448;
+//// const SAFE_SPACE_CHANNEL_ID = 247897731551592448;
 // const DM_CHANNEL_ID = 671046362783154224
 
 var question2 = "";
