@@ -65,6 +65,7 @@ possibleCommands = [
     '!help'
 ]
 
+//lets test again
 //phrases go here
 responses = {
     ben: "Actually his name is David",
