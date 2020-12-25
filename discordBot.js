@@ -11,6 +11,7 @@ let quizzer;
 
 //// const SAFE_SPACE_CHANNEL_ID = 247897731551592448;
 // const DM_CHANNEL_ID = 671046362783154224
+//helloooo
 
 var question2 = "";
 var answer = "";
