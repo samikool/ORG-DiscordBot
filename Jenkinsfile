@@ -23,7 +23,9 @@ pipeline {
         }
         stage('Push to staging'){
             steps{
-                sh 'git commit -m "pushing ${BUILD_NUMBER} to staging..."'
+                sh 'git checkout staging'
+                sh 'git merge ${BRANCH_NAME}'
+                sh 'git commit --all -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
                 sh 'git push origin staging'
             }
         }
