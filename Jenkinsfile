@@ -6,13 +6,7 @@ pipeline {
     options {
         skipStagesAfterUnstable()
     }
-    stages {
-        stage('Kill current bot'){
-            steps{
-                echo 'hey'
-                //sh /discordbot/scripts/kill.sh
-            }
-        }        
+    stages {   
         stage('Build') {
             steps {
                 sh 'node --check *.js'
@@ -24,9 +18,15 @@ pipeline {
                 //eventually ill have a way to test
 
                 //if pass
-                sh 'git push origin:staging'
+                
             }
         }
+        stage('Push to staging'){
+            steps{
+                sh 'git push origin staging'
+            }
+        }
+
         //deploys to test bot server
         stage('Deploy to staging'){
             when{
