@@ -28,7 +28,7 @@ pipeline {
             }
             steps{
                 sh '/discordbot/scripts/staging-kill.sh'
-                sh '/discordbot/scripts/staging-deploy.sh {$BRANCH_NAME}'
+                sh '/discordbot/scripts/staging-deploy.sh $BRANCH_NAME'
                 sh '/discordbot/scripts/staging-start.sh'
             }
         }
