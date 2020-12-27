@@ -22,11 +22,14 @@ pipeline {
             }
         }
         stage('Push to staging'){
+            when{not{
+                branch 'staging'
+            }}
             steps{
                 sh 'git checkout staging'
                 sh 'git merge ${BRANCH_NAME}'
-                sh 'git commit --all -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
-                sh 'git push origin staging'
+                //sh 'git commit -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
+                sh 'git push'
             }
         }
 
