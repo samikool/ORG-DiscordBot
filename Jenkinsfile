@@ -24,7 +24,7 @@ pipeline {
         stage('Deploy to staging'){
             when {
                 not { 
-                    branch 'staging',
+                    branch 'staging'
                     branch 'production'
                 }
             }
