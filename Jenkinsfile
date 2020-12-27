@@ -28,7 +28,7 @@ pipeline {
             steps{
 
 
-                withCredentials([usernamePassword(credentialsID:'Github', usernameVariable:'user', passwordVariable:'psw')]){
+                withCredentials([usernamePassword(credentialsId:'Github', usernameVariable:'user', passwordVariable:'psw')]){
                     echo "${user}"
                     echo "${psw}"
                     sh 'git config --global user.name "${user}"'
