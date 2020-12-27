@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                "node --check *.js"
-                npm install
+                "npm install"
             }
         }
         stage('Test'){
@@ -23,14 +23,14 @@ pipeline {
                 //eventually ill have a way to test
 
                 //if pass
-                git push origin:staging
+                "git push origin:staging"
             }
         }
         //deploys to test bot server
         stage('Deploy to staging'){
             when{
                 //eventually this should be a if tests pass
-                branch 'staging'
+                "branch 'staging'"
             }
             steps {
                 sh /discordbot/scripts/staging-kill.sh
