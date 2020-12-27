@@ -1,7 +1,7 @@
 const moment = require("moment");
-const SERVER_ID = "247897731551592448";
-const QUIZ_TAKER_ROLE_ID = "708857911446601770";
-const TRIGGERED_SHIT_LORD_ROLE_ID = "296103466844028928";
+const SERVER_ID = process.env.SERVER_ID;
+const QUIZ_TAKER_ROLE_ID = process.env.QUIZ_TAKER_ROLE_ID
+const TRIGGERED_SHIT_LORD_ROLE_ID = process.env.TRIGGERED_SHIT_LORD_ROLE_ID;
 const fetch = require("node-fetch");
 
 class Quizzer{
