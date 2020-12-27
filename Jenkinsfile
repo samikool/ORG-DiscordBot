@@ -2,7 +2,6 @@ pipeline {
     agent any
     environment{
         CI = 'true'
-        GithubCreds = credentials('Github')
     }
     options {
         skipStagesAfterUnstable()
@@ -29,12 +28,14 @@ pipeline {
             steps{
 
 
+                withCredentials(string[credentialsID:'Github', variable:'user', variable:'psw']){
 
+                }
                 sh 'git checkout staging'
                 sh 'git merge ${BRANCH_NAME}'
                 //sh 'git commit -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
-                sh 'git config --global user.name "${GithubCreds_USR}"'
-                sh 'git config --global user.password "{$GithubCreds_PSW}"'
+                sh 'git config --global user.name "${user}"'
+                sh 'git config --global user.password "{psw}"'
                 sh 'git push origin'
             }
         }
