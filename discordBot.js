@@ -309,7 +309,7 @@ function login(){
     })
     .catch((e) => {
         console.log('retrying to connect...');
-        setTimeout(login, 5000);
+        setTimeout(login, 5000);    
     });
 }
 
