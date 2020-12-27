@@ -28,16 +28,12 @@ pipeline {
             steps{
 
 
-                withCredentials([usernamePassword(credentialsId:'Github', usernameVariable:'user', passwordVariable:'psw')]){
-                    echo "${user}"
-                    echo "${psw}"
-                    sh 'git config --global user.name "${user}"'
-                    sh 'git config --global user.password "{psw}"'
+                withCredentials([usernameColonPassword(credentialsId:'Github', variable: 'userpass')]){
                     sh 'git checkout staging'
                     sh 'git merge ${BRANCH_NAME}'
                     //sh 'git commit -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
                 
-                sh 'git push origin'
+                sh 'git push https://userpass@origin'
                 }
                 
             }
