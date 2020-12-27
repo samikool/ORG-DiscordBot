@@ -18,7 +18,7 @@ pipeline {
                 //eventually ill have a way to test
 
                 //if pass
-                
+                echo 'testing...'
             }
         }
         stage('Push to staging'){
