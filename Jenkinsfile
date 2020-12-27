@@ -23,6 +23,7 @@ pipeline {
         }
         stage('Push to staging'){
             steps{
+                sh 'git commit -m "pushing ${BUILD_NUMBER} to staging..."'
                 sh 'git push origin staging'
             }
         }
