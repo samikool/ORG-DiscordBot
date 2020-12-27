@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment{
         CI = 'true'
+        GithubCreds = credentials('Github')
     }
     options {
         skipStagesAfterUnstable()
@@ -26,10 +27,13 @@ pipeline {
                 branch 'staging'
             }}
             steps{
+
+
+
                 sh 'git checkout staging'
                 sh 'git merge ${BRANCH_NAME}'
                 //sh 'git commit -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
-                sh 'git push origin'
+                sh 'git push https://${GithubCreds_USR}:{GithubCreds_PSW}@github.com/samikool/tarkovdiscordbot'
             }
         }
 
