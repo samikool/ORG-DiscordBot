@@ -14,8 +14,8 @@ pipeline {
         }        
         stage('Build') {
             steps {
-                node --check *.js
-                npm install
+                sh node --check *.js
+                sh npm install
             }
         }
         stage('Test'){
@@ -23,7 +23,7 @@ pipeline {
                 //eventually ill have a way to test
 
                 //if pass
-                git push origin:staging
+                sh git push origin:staging
             }
         }
         //deploys to test bot server
