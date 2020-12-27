@@ -33,7 +33,7 @@ pipeline {
                     sh 'git merge ${BRANCH_NAME}'
                     //sh 'git commit -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
                 
-                sh 'git push https://userpass@origin'
+                sh 'git push https://userpass@www.github.com/samikool/tarkovdiscordbot'
                 }
                 
             }
