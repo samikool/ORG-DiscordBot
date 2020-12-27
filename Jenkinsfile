@@ -22,10 +22,12 @@ pipeline {
             }
         }
         stage('Deploy to staging'){
-            when{not{
-                branch 'staging',
-                branch 'production'
-            }}
+            when {
+                not { 
+                    branch 'staging',
+                    branch 'production'
+                }
+            }
             steps{
                 sh '/discordbot/scripts/staging-kill.sh'
                 sh '/discordbot/scripts/staging-deploy.sh {$BRANCH_NAME}'
