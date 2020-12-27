@@ -21,33 +21,14 @@ pipeline {
                 echo 'testing...'
             }
         }
-        stage('Push to staging'){
+        stage('Deploy to staging'){
             when{not{
-                branch 'staging'
+                branch 'staging',
+                branch 'production'
             }}
             steps{
-
-
-                withCredentials([usernameColonPassword(credentialsId:'Github', variable: 'userpass')]){
-                    sh 'git checkout staging'
-                    sh 'git merge ${BRANCH_NAME}'
-                    //sh 'git commit -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
-                
-                sh 'git push https://userpass@www.github.com/samikool/tarkovdiscordbot'
-                }
-                
-            }
-        }
-
-        //deploys to test bot server
-        stage('Deploy to staging'){
-            when{
-                //eventually this should be a if tests pass
-                branch 'staging'
-            }
-            steps {
                 sh '/discordbot/scripts/staging-kill.sh'
-                sh '/discordbot/scripts/staging-deploy.sh'
+                sh '/discordbot/scripts/staging-deploy.sh {$BRANCH_NAME}'
                 sh '/discordbot/scripts/staging-start.sh'
             }
         }

@@ -220,14 +220,14 @@ async function getNextQuestion () {
 }    
     
 async function getQTMembers() {
-    const guild = client.guilds.cache.get("247897731551592448");
+    const guild = client.guilds.cache.get(process.env.SERVER_ID);
 
-    QTmembers = guild.roles.cache.get('708857911446601770').members.map(m=>m.user.id);
+    QTmembers = guild.roles.cache.get(process.env.QUIZ_TAKER_ROLE_ID).members.map(m=>m.user.id);
     //console.log(QTmembers);
     for (i = 0; i < QTmembers.length; i++) {
         var member = guild.members.cache.get(QTmembers[i]);
-        member.roles.add("296103466844028928")
-        member.roles.remove("708857911446601770")
+        member.roles.add(process.env.TRIGGERED_SHIT_LORD_ROLE_ID)
+        member.roles.remove(process.env.QUIZ_TAKER_ROLE_ID)
         member.voice.setMute(true);
     }
 }
