@@ -30,7 +30,7 @@ pipeline {
 
                 withCredentials([usernamePassword(credentialsID:'Github', usernameVariable:'user', passwordVariable:'psw')]){
                     echo "${user}"
-                    echo "${psw}""
+                    echo "${psw}"
                     sh 'git config --global user.name "${user}"'
                     sh 'git config --global user.password "{psw}"'
                     sh 'git checkout staging'
