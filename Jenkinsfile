@@ -9,12 +9,12 @@ pipeline {
     stages {
         stage('Kill current bot'){
             steps{
-                sh /discordbot/scripts/kill.sh
+                //sh /discordbot/scripts/kill.sh
             }
         }        
         stage('Build') {
             steps {
-                node --check *.js
+               "node --check *.js"
                 npm install
             }
         }
