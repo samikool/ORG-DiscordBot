@@ -9,6 +9,7 @@ pipeline {
     stages {
         stage('Kill current bot'){
             steps{
+                echo 'hey'
                 //sh /discordbot/scripts/kill.sh
             }
         }        
@@ -33,9 +34,9 @@ pipeline {
                 branch 'staging'
             }
             steps {
-                sh /discordbot/scripts/staging-kill.sh
-                sh /discordbot/scripts/staging-deploy.sh
-                sh /discordbot/scripts/staging-start.sh
+                sh '/discordbot/scripts/staging-kill.sh'
+                sh '/discordbot/scripts/staging-deploy.sh'
+                sh '/discordbot/scripts/staging-start.sh'
             }
         }
         stage('Deplay to production'){
@@ -43,7 +44,7 @@ pipeline {
                 branch 'production'
             }
             steps {
-                sh /discordbot/scripts/production-deploy.sh
+                sh '/discordbot/scripts/production-deploy.sh'
             }
         }
     }
