@@ -33,7 +33,9 @@ pipeline {
                 sh 'git checkout staging'
                 sh 'git merge ${BRANCH_NAME}'
                 //sh 'git commit -m "pushing ${BUILD_NUMBER} from ${BRANCH_NAME} to staging..."'
-                sh 'git push https://${GithubCreds_USR}:{GithubCreds_PSW}@github.com/samikool/tarkovdiscordbot'
+                sh 'git config --global user.name "${GithubCreds_USR}"'
+                sh 'git config --global user.password "{$GithubCreds_PSW}"'
+                sh 'git push origin'
             }
         }
 
