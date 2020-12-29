@@ -32,7 +32,7 @@ pipeline {
                 sh '/discordbot/scripts/staging-start.sh'
             }
         }
-        stage('Deplay to production'){
+        stage('Deploy to production'){
             when { 
                 branch 'production'
             }

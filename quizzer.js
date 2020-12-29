@@ -1,6 +1,6 @@
 const moment = require("moment");
 const SERVER_ID = process.env.SERVER_ID;
-const QUIZ_TAKER_ROLE_ID = process.env.QUIZ_TAKER_ROLE_ID
+const QUIZ_TAKER_ROLE_ID = process.env.QUIZ_TAKER_ROLE_ID;
 const TRIGGERED_SHIT_LORD_ROLE_ID = process.env.TRIGGERED_SHIT_LORD_ROLE_ID;
 const fetch = require("node-fetch");
 
