@@ -16,15 +16,15 @@ pipeline {
         stage('Test'){
             steps{
                 //eventually ill have a way to test
-
-                //if pass
                 echo 'testing...'
+                //if pass local tests push to staging
+                sh 'git push origin $BRANCH_NAME:staging'
+                
             }
         }
         stage('Deploy to staging'){
             when {
-                not {branch 'staging'}
-                not {branch 'production'}
+                branch 'staging'
             }
             steps{
                 sh '/discordbot/scripts/staging-kill.sh'
