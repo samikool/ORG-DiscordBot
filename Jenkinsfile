@@ -23,6 +23,7 @@ pipeline {
             when {
                 not {branch 'staging'}
                 not {branch 'production'}
+                not {branch 'master'}
             }
             steps{
                 withCredentials([usernamePassword(credentialsId: 'Github-User-Token', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
