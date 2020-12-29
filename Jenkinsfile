@@ -15,10 +15,16 @@ pipeline {
         }
         stage('Test'){
             steps{
+               
                 //eventually ill have a way to test
                 echo 'testing...'
-                //if pass local tests push to staging
-                sh 'git push origin $BRANCH_NAME:staging'
+                //if pass local tests pass, push to staging
+                 when{
+                    not{branch 'staging'}
+                    not{branch 'production'}
+                    
+                    sh 'git push origin $BRANCH_NAME:staging'
+                }
                 
             }
         }
