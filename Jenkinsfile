@@ -29,7 +29,7 @@ pipeline {
                         sh """
                             git remote update
                             git fetch 
-                            git checkout --track https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/samikool/TarkovDiscordBot/staging
+                            git checkout https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/samikool/TarkovDiscordBot/staging
                         """
                     }
                 }
