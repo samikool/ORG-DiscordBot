@@ -25,8 +25,9 @@ pipeline {
                 not {branch 'production'}
             }
             steps{
-                sh 'git commit --all -m "$BRANCH_NAME build $BUILD_NUMBER being push to staging branch..."'
-                sh 'git push origin "$BRANCH_NAME:staging"'
+                sh 'git checkout staging'
+                sh 'git merge $BRANCH_NAME'
+                sh 'git push"'
             }
         }
         stage('Deploy to staging'){
