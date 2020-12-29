@@ -30,7 +30,7 @@ pipeline {
                         // sh """
                         //     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/samikool/TarkovDiscordBot.git HEAD:staging
                         // """
-                        git push origin HEAD:staging
+                        sh 'git push origin HEAD:staging'
                     }
                 }
         }
