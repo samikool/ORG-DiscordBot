@@ -26,7 +26,7 @@ pipeline {
             }
             steps{
                 withCredentials([usernameColonPassword(credentialsId: 'Github-User-Token', variable: 'USERPASS')]) {
-                    sh 'git push http://$USERPASS@github.com/samikool/TarkovDiscordBot $BRANCH_NAME:staging'
+                    sh 'git push http://$USERPASS@github.com/samikool/TarkovDiscordBot.git $BRANCH_NAME:staging'
                 }
                 }
         }
