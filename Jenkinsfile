@@ -25,7 +25,7 @@ pipeline {
                 not {branch 'production'}
             }
             steps{
-                withCredentials([usernameColonPassword(credentialsId: 'Github-SSHKey-samikool', variable: 'SSH_KEY')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'Github-SSHKey-samikool', keyFileVariable: 'SSH_KEY')]) {
                     sh 'git push origin $BRANCH_NAME:staging'
                 }
                 }
