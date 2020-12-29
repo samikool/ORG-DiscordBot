@@ -7,8 +7,11 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {   
-        stage('checkout'){
-            checkout scm
+        stage("checkout"){
+            steps{
+                checkout scm
+            }
+            
         }
         stage('Build') {
             steps {
