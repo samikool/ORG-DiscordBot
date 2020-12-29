@@ -25,10 +25,10 @@ pipeline {
                 not {branch 'production'}
             }
             steps{
-                sh 'git checkout staging'
-                sh 'git merge $BRANCH_NAME'
-                sh 'git push"'
-            }
+                withCredentials([usernameColonPassword(credentialsId: 'Github-User-Token', variable: 'USERPASS')]) {
+                    sh 'git $USERPASS push origin $BRANCH_NAME:staging:'
+                }
+                }
         }
         stage('Deploy to staging'){
             when {
