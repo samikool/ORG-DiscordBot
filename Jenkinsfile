@@ -27,7 +27,7 @@ pipeline {
             steps{
                 sh """
                 git fetch --all
-                git checkout origin staging
+                git checkout origin/staging
                 git merge $BRANCH_NAME
                 git push
                 """
