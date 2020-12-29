@@ -25,9 +25,12 @@ pipeline {
                 not {branch 'production'}
             }
             steps{
-                withCredentials([usernameColonPassword(credentialsId: 'Github-User-Token', variable: 'USERPASS')]) {
-                    sh "git push origin origin/$BRANCH_NAME:staging"
-                }
+                sh """
+                git fetch --all
+                git checkout staging
+                git merge $BRANCH_NAME
+                git push
+                """
                 }
         }
         stage('Deploy to staging'){
