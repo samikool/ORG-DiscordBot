@@ -25,7 +25,7 @@ pipeline {
                 not {branch 'production'}
             }
             steps{
-                sh 'git push origin $BRANCH_NAME:staging'
+                sh 'git push origin "$BRANCH_NAME:staging"'
             }
         }
         stage('Deploy to staging'){
