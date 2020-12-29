@@ -25,12 +25,9 @@ pipeline {
                 not {branch 'production'}
             }
             steps{
-                sh """
-                git fetch --all
-                git checkout origin/staging
-                git merge $BRANCH_NAME
-                git push
-                """
+                withCredentials([usernamePassword(credentialsId: 'Github-User-Token', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/samikool/TarkovDiscordBot $BRANCH_NAME:staging')
+                    }
                 }
         }
         stage('Deploy to staging'){
