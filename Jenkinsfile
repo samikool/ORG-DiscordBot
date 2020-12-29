@@ -7,6 +7,9 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {   
+        stage('checkout'){
+            checkout scm
+        }
         stage('Build') {
             steps {
                 sh 'node --check *.js'
@@ -26,10 +29,7 @@ pipeline {
             }
             steps{
                 withCredentials([sshUserPrivateKey(credentialsId: 'Github-SSHKey-samikool', keyFileVariable: 'SSH_KEY')]) {
-                    sh """
-                    GIT_SSH_COMMAND = "ssh -i $SSH_KEY"
-                    git push origin $BRANCH_NAME:staging
-                    """
+                    sh "git push origin $BRANCH_NAME:staging"
                 }
                 }
         }
