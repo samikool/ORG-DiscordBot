@@ -26,6 +26,7 @@ pipeline {
             }
             steps{
                 withCredentials([sshUserPrivateKey(credentialsId: 'Github-SSHKey-samikool', keyFileVariable: 'SSH_KEY')]) {
+                    sh 'GIT_SSH_COMMAND = "ssh -i $SSH_KEY"'
                     sh 'git push origin $BRANCH_NAME:staging'
                 }
                 }
