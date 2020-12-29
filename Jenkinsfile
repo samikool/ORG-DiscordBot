@@ -25,6 +25,7 @@ pipeline {
                 not {branch 'production'}
             }
             steps{
+                sh 'git commit --all -m "$BRANCH_NAME build $BUILD_NUMBER being push to staging branch..."'
                 sh 'git push origin "$BRANCH_NAME:staging"'
             }
         }
