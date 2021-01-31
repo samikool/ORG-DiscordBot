@@ -41,7 +41,7 @@ pipeline {
             }
             steps{
                 sh """
-                    sudo pm2 stop /discordbot/staging/ecosystem.config.js 1>/dev/null
+                    sudo pm2 stop discordBot-staging 1>/dev/null
 
                     sudo rm -rf /discordbot/staging/*
 
@@ -60,7 +60,7 @@ pipeline {
             }
             steps {
                 sh """
-                    sudo pm2 stop /discordbot/production/ecosystem.config.js 1>/dev/null
+                    sudo pm2 stop discordBot-staging 1>/dev/null
 
                     sudo rm -rf /discordbot/production/*
 
