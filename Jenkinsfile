@@ -38,7 +38,18 @@ pipeline {
                 branch 'staging'
             }
             steps{
-                sh '/discordbot/scripts/staging-deploy.sh $BRANCH_NAME'
+                sh """
+                    sudo pm2 stop /discordbot/staging/ecosystem.config.js 1>/dev/null
+
+                    sudo rm -rf /discordbot/staging/*
+
+                    sudo cp *.js *.json /discordbot/staging/ -rf
+                    sudo cp /discordbot/env/.env-staging /discordbot/staging/.env
+
+                    sudo npm install --prefix /discordbot/staging/
+
+                    sudo npm run deploy:staging --prefix /discordbot/staging/
+                """
             }
         }
         stage('Deploy to production'){
@@ -46,7 +57,18 @@ pipeline {
                 branch 'production'
             }
             steps {
-                sh '/discordbot/scripts/production-deploy.sh'
+                sh """
+                    sudo pm2 stop /discordbot/production/ecosystem.config.js 1>/dev/null
+
+                    sudo rm -rf /discordbot/production/*
+
+                    sudo cp *.js *.json /discordbot/production/ -rf
+                    sudo cp /discordbot/env/.env-production /discordbot/production/.env
+
+                    sudo npm install --prefix /discordbot/production/
+
+                    sudo npm run deploy:production --prefix /discordbot/production/
+                """
             }
         }
     }

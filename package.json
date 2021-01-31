@@ -6,12 +6,15 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "moment": "^2.25.3"
+    "mariadb": "^2.5.2",
+    "moment": "^2.25.3",
+    "nodemon": "^2.0.7"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node discordBot.js",
-    "dev": "nodemon discordBot.js",
+    "start": "NODE_ENV=development nodemon discordBot.js",
+    "deploy:staging": "NODE_ENV=staging pm2 start ecosystem.config.js --env staging",
+    "deploy:production": "pm2 start ecosystem.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
