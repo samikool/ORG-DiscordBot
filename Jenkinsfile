@@ -54,7 +54,7 @@ pipeline {
         }
         stage('Deploy to production'){
             when { 
-                branch 'production'
+                tag 'release-v*'
             }
             steps {
                 sh """
