@@ -4,7 +4,10 @@ if(process.env.NODE_ENV === "staging") name += '-' + process.env.NODE_ENV
 module.exports = {
   apps : [{
     name: name,
-    script: './discordBot.js',
+    script: 'discordBot.js',
+    exp_backoff_restart_delay: 100,
+    watch: true,
+    watch_delay: 1000,
     env:{
       NODE_ENV: "production" 
       

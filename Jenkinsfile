@@ -40,7 +40,7 @@ pipeline {
             }
             steps{
                 sh """
-                    sudo pm2 stop discordBot-staging 1>/dev/null
+                    sudo npm run stop:staging --prefix /discordbot/staging/
 
                     sudo rm -rf /discordbot/staging/*
 
@@ -59,7 +59,7 @@ pipeline {
             }
             steps {
                 sh """
-                    sudo pm2 stop discordBot-staging 1>/dev/null
+                    sudo npm stop --prefix /discordbot/production/
 
                     sudo rm -rf /discordbot/production/*
 
@@ -68,7 +68,7 @@ pipeline {
 
                     sudo npm install --prefix /discordbot/production/
 
-                    sudo npm run deploy:production --prefix /discordbot/production/
+                    sudo npm deploy --prefix /discordbot/production/
                 """
             }
         }
