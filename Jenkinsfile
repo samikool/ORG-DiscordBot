@@ -24,6 +24,7 @@ pipeline {
                 not {branch 'staging'}
                 not {branch 'production'}
                 not {branch 'master'}
+                not {tag 'release-v*'}
             }
             steps{
                 withCredentials([usernamePassword(credentialsId: 'Github-User-Token', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
@@ -36,6 +37,7 @@ pipeline {
         stage('Deploy to staging'){
             when {
                 branch 'staging'
+                
             }
             steps{
                 sh """
