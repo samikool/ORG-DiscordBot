@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const Discord = require('discord.js');
 const Quizzer = require('./quizzer.js');
-const client = new Discord.Client({autoReconnect:true});
+const client = new Discord.Client({retryLimit: -1});
 
 const db = require('./database')
  
@@ -48,7 +48,6 @@ client.on('message', async function(msg) {
 
         if(cmd.response === 'image'){
             let image = await db.getImageByCommandID(cmd.id)
-            console.log(image)
             image = image[0]
             
             msg.channel.send({files: [image.path]})
@@ -96,8 +95,12 @@ client.on('message', async function(msg) {
     }
 })
 
-client.on('error', async function(error){
-    console.log(error)
+client.on('error', (e) => {
+    console.error(e)
+})
+
+client.on('shardError', (e, i) =>{
+    console.error(i, e)
 })
 
 async function login(){
