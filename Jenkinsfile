@@ -68,7 +68,7 @@ pipeline {
 
                     sudo npm install --prefix /discordbot/production/
 
-                    sudo npm deploy --prefix /discordbot/production/
+                    sudo npm run deploy --prefix /discordbot/production/
                 """
             }
         }
