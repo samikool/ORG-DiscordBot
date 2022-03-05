@@ -4,13 +4,12 @@
   "description": "This bot is fucking sick yo",
   "main": "discordBot.js",
   "dependencies": {
-    "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0",
+    "discord.js": "^13.2.0",
+    "dotenv": "^10.0.0",
     "mariadb": "^2.5.2",
     "moment": "^2.25.3",
     "nodemon": "^2.0.7"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "NODE_ENV=development nodemon discordBot.js",
     "deploy:staging": "NODE_ENV=staging pm2 start ecosystem.config.js",

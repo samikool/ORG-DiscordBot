@@ -1,10 +1,15 @@
 require('dotenv').config()
 
-const Discord = require('discord.js');
+
+const {Client, Intents} = require('discord.js');
 const Quizzer = require('./quizzer.js');
-const client = new Discord.Client({retryLimit: -1});
+
+const client = new Client({intents: 0xFFFF});
 
 const db = require('./database')
+
+const fs = require('fs')
+const pathh = require('path')
  
 let quizzer;
 
@@ -14,27 +19,23 @@ let quizzer;
  */
 client.on('ready', async function ()  {
     console.log(`Logged in as ${client.user.tag}!`);
-    quizzer = new Quizzer(Discord, client);
+    quizzer = new Quizzer(Client, client);
 });
 
-client.on('message', async function(msg) {
+client.on('messageCreate', async function(msg) {
 
     // if(msg.channel.type === 'text'){
     //     if(msg.content.includes("#")){
-    //         msg.delete({reason: "Hashtags are not longer allowed to promote a safe and health discord enviornemnt."})
+    //         msg.delete({reason: "Hashtags are not longer allowed to promote a safe and healthy discord enviornemnt."})
     //         msg.channel.send("Sorry hashtags are no longer allowed for your safety")
     //     }
     // }
 
     let userID = msg.author.id;
     if(quizzer.isTakingQuiz(userID)) quizzer.checkAnswer(userID, msg.content)
-    
-
 
     //if message is from chat channel
-    if (msg.channel.type === 'text' && msg.content.startsWith('!')) {
-        var command = msg.content.toLowerCase().split(' ')[0];
-        
+    if (msg.channel.type === 'GUILD_TEXT' && msg.content.startsWith('!')) {
         let cname = msg.content.split(' ')[0]
         cname = cname.replace('!','')
 
@@ -44,7 +45,7 @@ client.on('message', async function(msg) {
         //command was not found
         if(!cmd) return
 
-        console.log('Command: ' + cmd.name)
+        console.log('command: ' + cmd.name)
 
         if(cmd.response === 'image'){
             let image = await db.getImageByCommandID(cmd.id)
@@ -52,8 +53,20 @@ client.on('message', async function(msg) {
             
             msg.channel.send({files: [image.path]})
         }
-        else if(cmd.response === 'text'){
+        else if(cmd.response === 'image_folder')
+        {
+            let path = await db.getImageFolderByCommandID(cmd.id)
+            path = path[0]
             
+            path = pathh.resolve('/', 'discordbot', 'images', path.path)
+            file_list = fs.readdirSync(path)
+
+            let random =  Math.round(Math.random() * (file_list.length - 1))
+            path = pathh.resolve(path, file_list[random])
+
+            msg.channel.send({files: [path]})
+        }
+        else if(cmd.response === 'text'){
             let text = await db.getTextByCommandID(cmd.id)
             text = text[0]
 
@@ -66,21 +79,25 @@ client.on('message', async function(msg) {
             msg.channel.send(link.link)
         }
         else if(cmd.response === 'action'){
-            //these commands have dynamic responses for now ill just hardcode what they do
+            //these commands have dynamic responses for now I'll just hardcode what they do
             if(cmd.name === 'roll'){
-                let random = Math.random();
-                if(random < 0.5) msg.channel.send("Heads");
-                else msg.channel.send("Tails");
+                let random = Math.random()
+                if(random < 0.5) msg.channel.send("Heads")
+                else msg.channel.send("Tails")
             }
             else if(cmd.name === 'quiz'){
                 if(msg.author.id === "658888119114006538"){
-                    msg.channel.send("Sorry, we dont\'t allow people with the name Tim to quiz.... :(");
+                    msg.channel.send("Sorry, we dont\'t allow people with the name Tim to quiz others.... :(");
                     msg.channel.send("Please be sure to file a complaint with our admins if this continues to be a problem.");
                 }
                 else if(msg.mentions.members.first().id === "379844352714997761" || msg.mentions.members.first().id === "247897498104889345")
                     msg.channel.send('You can\'t quiz them, they are better than you...')
                 else
                     quizzer.startQuiz(msg.mentions.members.first().id)
+            }
+            else if(cmd.name == 'queuethemusic'){
+                let channelID = await msg.guild.channels.fetchActiveThreads()
+                console.log(channelID);
             }
             else if(cmd.name === 'help'){
                 let commands = await db.getAllCommands()                
@@ -107,6 +124,7 @@ async function login(){
     try{
         await client.login(process.env.TOKEN)
     }catch(e){
+        console.log(e)
         console.log('retrying to connect...')
         setTimeout(login, 5000);
     }

@@ -3,7 +3,7 @@ require('dotenv').config()
 const connectionInfo = {
     host: "localhost",
     user: process.env.dbname,
-    password: process.env.dbpass,
+    password: process.env.dbpass,  
     database: "discordbot"
 }
 
@@ -76,6 +76,11 @@ async function getImageByCommandID(commandID){
     return await query(query_str)
 }
 
+async function getImageFolderByCommandID(commandID){
+    const query_str = `SELECT * FROM image_folder WHERE commandID='${commandID}'`
+    return await query(query_str)
+}
+
 async function getTextByCommandID(commandID){
     const query_str = `SELECT * FROM text WHERE commandID='${commandID}'`
     return await query(query_str)
@@ -122,6 +127,7 @@ module.exports = {
     getCommandIDByName,
     getCommandType,
     getImageByCommandID,
+    getImageFolderByCommandID,
     getLinkByCommandID,
     getTextByCommandID,
 }

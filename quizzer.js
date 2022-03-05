@@ -3,6 +3,7 @@ const SERVER_ID = process.env.SERVER_ID;
 const QUIZ_TAKER_ROLE_ID = process.env.QUIZ_TAKER_ROLE_ID;
 const TRIGGERED_SHIT_LORD_ROLE_ID = process.env.TRIGGERED_SHIT_LORD_ROLE_ID;
 const fetch = require("node-fetch");
+const timer = require("timers");
 
 class Quizzer{
     constructor(Discord, client){
@@ -17,15 +18,11 @@ class Quizzer{
      * Function sets intervald to store people in quiztaker role in the quiztakers map
      */
     async startUpdateQuiztakerInterval(){
-        this.client.setInterval(async () => {
+        timer.setInterval(async () => {
             let guild = await this.client.guilds.cache.get(SERVER_ID);
 
-
             guild.roles.cache.get(QUIZ_TAKER_ROLE_ID).members.forEach((user) => {
-                
-                this.quiztakers[user.id] = {
-
-                };
+                this.quiztakers[user.id] = {};
             })
         }, 5000);
     }
