@@ -48,8 +48,7 @@ pipeline {
                 sh "git config user.name Jenkins"
                 sh "git branch -a"
                 sh "git checkout staging"
-                sh "git merge ${getGitBranchName()}"
-                sh "git commit --all -m \"jenkins merging ${getGitBranchName()} into staging\""
+                sh "git merge ${getGitBranchName()} -m \"jenkins merging ${getGitBranchName()} into staging\""
                 sh "git push"
             }
         }
