@@ -71,7 +71,7 @@ pipeline {
                 tag 'release-v*'
             }
             steps {
-                sh "sudo npm stop --prefix /discordbot/production/"
+                sh "sudo pm2 stop /discordbot/production/ecosystem.config.js"
 
                 sh "sudo rm -rf /discordbot/production/*"
 
@@ -79,7 +79,7 @@ pipeline {
                 sh "sudo cp /discordbot/env/.env-production /discordbot/production/.env"
 
                 sh "sudo npm install --prefix /discordbot/production/"
-                sh "sudo npm run deploy --prefix /discordbot/production/"
+                sh "sudo pm2 start /discordbot/production/ecosystem.config.js"
             }
         }
     }
