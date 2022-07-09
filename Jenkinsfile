@@ -46,7 +46,7 @@ pipeline {
             }
             steps{
                 
-                echo "${getGitBranchName()}}"
+                echo "${getGitBranchName()}"
                 sh """
                     git branch -a
                     git checkout staging
