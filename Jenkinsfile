@@ -15,14 +15,12 @@ pipeline {
     stages {   
         stage('Clone') {
             steps {
-                sh """
-                    rm -rf ./* .git .gitignore
-                    ls -lah
-                    git clone https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git .
-                    git fetch --all
-                    git pull --all
-                    git checkout ${getGitBranchName()}
-                """
+                sh "rm -rf ./* .git .gitignore"
+                sh "ls -lah"
+                sh "git clone https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git ."
+                sh "git fetch --all"
+                sh "git pull --all"
+                sh "git checkout ${getGitBranchName()}"
             }
         }
         stage('Build') {
@@ -47,14 +45,11 @@ pipeline {
             steps{
                 
                 echo "${getGitBranchName()}"
-                sh """
-                    git branch -a
-                    git checkout staging
-                    git merge ${getGitBranchName()}
-                    git commit --all -m "jenkins merging ${getGitBranchName()}"
-                    git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
-                """
-                
+                sh "git branch -a"
+                sh "git checkout staging"
+                sh "git merge ${getGitBranchName()}"
+                sh "git commit --all -m \"jenkins merging ${getGitBranchName()}\""
+                sh "git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git"
             }
         }
         stage('Deploy to staging'){
