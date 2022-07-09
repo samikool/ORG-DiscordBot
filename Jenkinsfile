@@ -51,6 +51,7 @@ pipeline {
                     git branch -a
                     git checkout staging
                     git merge ${getGitBranchName()}
+                    git commit --all -m "jenkins merging ${getGitBranchName}"
                     git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
                 """
                 
