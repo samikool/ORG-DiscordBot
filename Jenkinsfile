@@ -1,3 +1,7 @@
+def getGitBranchName() {
+    return scm.branches[0].name
+}
+
 pipeline {
     agent any
     environment{
@@ -28,8 +32,9 @@ pipeline {
             }
             steps{
                 withCredentials([string(credentialsId: 'github-access-token', variable: 'GITHUB_TOKEN')]) {
-                 // some block
-                    sh "git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git HEAD:staging"
+                    sh "git checkout staging"
+                    sh "git merge + ${getGitBranchName()}"
+                    sh "git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git"
                 }
             }
         }
