@@ -6,7 +6,7 @@ pipeline {
     agent any
     environment{
         CI = 'true'
-        GITHUB_TOKEN = credentials('github-access-token')
+        GITHUB_TOKEN = credentials('github-user-token')
     }
     options {
         skipStagesAfterUnstable()
