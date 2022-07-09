@@ -27,12 +27,11 @@ pipeline {
                 not {tag 'release-v*'}
             }
             steps{
-                withCredentials([usernamePassword(credentialsId: 'Github-User-Token', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh """
-                            git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/samikool/TarkovDiscordBot.git HEAD:staging
-                        """
-                    }
+                withCredentials([string(credentialsId: 'github-access-token', variable: 'GITHUB_TOKEN')]) {
+                 // some block
+                    sh "git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git HEAD:staging"
                 }
+            }
         }
         stage('Deploy to staging'){
             when {
