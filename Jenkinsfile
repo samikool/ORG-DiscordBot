@@ -46,7 +46,7 @@ pipeline {
                 echo "${getGitBranchName()}"
                 sh "git branch -a"
                 sh "git checkout staging"
-                sh "git merge ${getGitBranchName()} --author=\"Jenkins <sam.morgan44@gmail.com>\""
+                sh "git merge ${getGitBranchName()}"
                 sh "git commit --all -m \"jenkins merging ${getGitBranchName()} into staging\""
                 sh "git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git"
             }
