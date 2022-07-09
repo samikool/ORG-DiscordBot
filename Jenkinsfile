@@ -16,7 +16,8 @@ pipeline {
         stage('Clone') {
             steps {
                 sh """
-                    git clone https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
+                    rm -rf ./* .git/*
+                    git clone https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git .
                     git fetch --all
                     git pull --all
                     git checkout ${getGitBranchName()}
