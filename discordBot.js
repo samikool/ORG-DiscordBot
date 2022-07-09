@@ -35,7 +35,7 @@ client.on('messageCreate', async function(msg) {
     if(quizzer.isTakingQuiz(userID)) quizzer.checkAnswer(userID, msg.content)
 
     //if message is from chat channel
-    if (msg.channel.type === 'GUILD_TEXT' && msg.content.startsWith('!')) {
+    if (msg.content.startsWith('!')) {
         let cname = msg.content.split(' ')[0]
         cname = cname.replace('!','')
 
