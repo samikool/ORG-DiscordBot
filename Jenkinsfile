@@ -16,7 +16,6 @@ pipeline {
         stage('Clone') {
             steps {
                 sh "rm -rf ./* .git .gitignore"
-                sh "ls -lah"
                 sh "git clone https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git ."
                 sh "git fetch --all"
                 sh "git pull --all"
@@ -43,10 +42,9 @@ pipeline {
                 not {tag 'release-v*'}
             }
             steps{
-                echo "${getGitBranchName()}"
+                echo "merging ${getGitBranchName()}"
                 sh "git config user.email sam.morgan44@gmail.com"
                 sh "git config user.name Jenkins"
-                sh "git branch -a"
                 sh "git checkout staging"
                 sh "git merge ${getGitBranchName()} -m \"jenkins merging ${getGitBranchName()} into staging\""
                 sh "git push"
@@ -57,18 +55,15 @@ pipeline {
                 branch 'staging'
             }
             steps{
-                sh """
-                    sudo npm run stop:staging --prefix /discordbot/staging/
+                sh "sudo npm run stop:staging --prefix /discordbot/staging/"
 
-                    sudo rm -rf /discordbot/staging/*
+                sh "sudo rm -rf /discordbot/staging/*"
 
-                    sudo cp *.js *.json /discordbot/staging/ -rf
-                    sudo cp /discordbot/env/.env-staging /discordbot/staging/.env
+                sh "sudo cp *.js *.json /discordbot/staging/ -rf"
+                sh "sudo cp /discordbot/env/.env-staging /discordbot/staging/.env"
 
-                    sudo npm install --prefix /discordbot/staging/
-
-                    sudo npm run deploy:staging --prefix /discordbot/staging/
-                """
+                sh "sudo npm install --prefix /discordbot/staging/"
+                sh "sudo npm run deploy:staging --prefix /discordbot/staging/"
             }
         }
         stage('Deploy to production'){
@@ -76,18 +71,15 @@ pipeline {
                 tag 'release-v*'
             }
             steps {
-                sh """
-                    sudo npm stop --prefix /discordbot/production/
+                sh "sudo npm stop --prefix /discordbot/production/"
 
-                    sudo rm -rf /discordbot/production/*
+                sh "sudo rm -rf /discordbot/production/*"
 
-                    sudo cp *.js *.json /discordbot/production/ -rf
-                    sudo cp /discordbot/env/.env-production /discordbot/production/.env
+                sh "sudo cp *.js *.json /discordbot/production/ -rf"
+                sh "sudo cp /discordbot/env/.env-production /discordbot/production/.env"
 
-                    sudo npm install --prefix /discordbot/production/
-
-                    sudo npm run deploy --prefix /discordbot/production/
-                """
+                sh "sudo npm install --prefix /discordbot/production/"
+                sh "sudo npm run deploy --prefix /discordbot/production/"
             }
         }
     }
