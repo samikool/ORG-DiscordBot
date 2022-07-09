@@ -15,6 +15,8 @@ pipeline {
         stage('Clone') {
             steps {
                 sh """
+                    git fetch --all
+                    git pull --all
                     git checkout ${getGitBranchName()}
                 """
             }
@@ -42,8 +44,6 @@ pipeline {
                 
                 echo "${getGitBranchName()}}"
                 sh """
-                    git fetch --all
-                    git pull --all
                     git branch
                     git checkout staging
                     git merge + ${getGitBranchName()}
