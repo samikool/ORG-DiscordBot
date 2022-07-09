@@ -4,7 +4,7 @@
   "description": "This bot is fucking sick yo",
   "main": "discordBot.js",
   "dependencies": {
-    "discord.js": "^13.2.0",
+    "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "mariadb": "^2.5.2",
     "moment": "^2.25.3",
