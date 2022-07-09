@@ -32,6 +32,7 @@ pipeline {
             }
             steps{
                 withCredentials([string(credentialsId: 'github-access-token', variable: 'GITHUB_TOKEN')]) {
+                    sh "git fetch --all"
                     sh "git checkout staging"
                     sh "git merge + ${getGitBranchName()}"
                     sh "git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git"
