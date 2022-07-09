@@ -36,8 +36,8 @@ pipeline {
                 echo "${getGitBranchName()}}"
                 sh """
                     ls -lah
-                    git branch
                     git fetch --all
+                    git branch
                     git checkout staging
                     git merge + ${getGitBranchName()}
                     git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
