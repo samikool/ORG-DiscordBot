@@ -17,6 +17,7 @@ pipeline {
             steps {
                 sh """
                     rm -rf ./* .git/*
+                    ls -lah
                     git clone https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git .
                     git fetch --all
                     git pull --all
