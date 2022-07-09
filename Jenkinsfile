@@ -43,7 +43,9 @@ pipeline {
                 not {tag 'release-v*'}
             }
             steps{
-                echo "${getGitBranchName()}"
+                echo "${getGitBranchName()}"\
+                sh "git config user.email sam.morgan44@gmail.com"
+                sh "git config user.name Jenkins"
                 sh "git branch -a"
                 sh "git checkout staging"
                 sh "git merge ${getGitBranchName()}"
