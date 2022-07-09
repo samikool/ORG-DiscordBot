@@ -12,6 +12,15 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {   
+        stage('Clone') {
+            steps {
+                sh """
+                    rm -rf * .*
+                    git clone "https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git" .
+                    git checkout ${getGitBranchName}
+                """
+            }
+        }
         stage('Build') {
             steps {
                 sh 'node --check *.js'
