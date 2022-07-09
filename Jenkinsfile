@@ -50,7 +50,7 @@ pipeline {
                 sh """
                     git branch -a
                     git checkout staging
-                    git merge + ${getGitBranchName()}
+                    git merge ${getGitBranchName()}
                     git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
                 """
                 
