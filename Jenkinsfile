@@ -9,15 +9,17 @@ pipeline {
         GITHUB_TOKEN = credentials('github-user-token')
     }
     options {
+        skipDefaultCheckout(true)
         skipStagesAfterUnstable()
     }
     stages {   
         stage('Clone') {
             steps {
                 sh """
+                    git clone https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
                     git fetch --all
-                    git checkout ${getGitBranchName()}
                     git pull --all
+                    git checkout ${getGitBranchName()}
                 """
             }
         }
