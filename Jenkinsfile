@@ -44,6 +44,7 @@ pipeline {
                 sh """
                     git fetch --all
                     git pull --all
+                    git branch
                     git checkout staging
                     git merge + ${getGitBranchName()}
                     git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
