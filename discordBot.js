@@ -108,6 +108,22 @@ client.on('messageCreate', async function(msg) {
 
                 msg.channel.send(s)
             }
+            else if(cmd.name == 'test'){
+                if(msg.author.id != '379844352714997761') 
+                {
+                    console.log("User " + msg.author.name + " not authorized to test.")
+                    return
+                }
+                    
+                let commands = await db.getAllCommands()
+                commands = commands.map(cmd => {return '!'+cmd.name})
+
+                commands.map(cmd => {
+                    if(cmd == "!test" || cmd == "!quiz")
+                        return
+                    msg.channel.send(cmd)
+                })
+            }
         }
     }
 })
