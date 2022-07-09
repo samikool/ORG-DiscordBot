@@ -1,12 +1,28 @@
+def getGitBranchName() {
+    return scm.branches[0].name
+}
+
 pipeline {
     agent any
     environment{
         CI = 'true'
+        GITHUB_TOKEN = credentials('github-user-token')
     }
     options {
+        skipDefaultCheckout(true)
         skipStagesAfterUnstable()
     }
     stages {   
+        stage('Clone') {
+            steps {
+                sh "rm -rf ./* .git .gitignore"
+                sh "ls -lah"
+                sh "git clone https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git ."
+                sh "git fetch --all"
+                sh "git pull --all"
+                sh "git checkout ${getGitBranchName()}"
+            }
+        }
         stage('Build') {
             steps {
                 sh 'node --check *.js'
@@ -27,12 +43,14 @@ pipeline {
                 not {tag 'release-v*'}
             }
             steps{
-                withCredentials([usernamePassword(credentialsId: 'Github-User-Token', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh """
-                            git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/samikool/TarkovDiscordBot.git HEAD:staging
-                        """
-                    }
-                }
+                echo "${getGitBranchName()}"
+                sh "git config user.email sam.morgan44@gmail.com"
+                sh "git config user.name Jenkins"
+                sh "git branch -a"
+                sh "git checkout staging"
+                sh "git merge ${getGitBranchName()} -m \"jenkins merging ${getGitBranchName()} into staging\""
+                sh "git push"
+            }
         }
         stage('Deploy to staging'){
             when {

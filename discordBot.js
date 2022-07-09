@@ -43,7 +43,8 @@ client.on('messageCreate', async function(msg) {
         cmd = cmd[0]
 
         //command was not found
-        if(!cmd) return
+        if(!cmd) 
+            return
 
         console.log('command: ' + cmd.name)
 
@@ -82,8 +83,10 @@ client.on('messageCreate', async function(msg) {
             //these commands have dynamic responses for now I'll just hardcode what they do
             if(cmd.name === 'roll'){
                 let random = Math.random()
-                if(random < 0.5) msg.channel.send("Heads")
-                else msg.channel.send("Tails")
+                if(random < 0.5) 
+                    msg.channel.send("Heads")
+                else 
+                    msg.channel.send("Tails")
             }
             else if(cmd.name === 'quiz'){
                 if(msg.author.id === "658888119114006538"){
@@ -107,6 +110,22 @@ client.on('messageCreate', async function(msg) {
                 s = "Possible commands are: " + s
 
                 msg.channel.send(s)
+            }
+            else if(cmd.name == 'test'){
+                if(msg.author.id != '379844352714997761') 
+                {
+                    console.log("User " + msg.author.name + " not authorized to test.")
+                    return
+                }
+                    
+                let commands = await db.getAllCommands()
+                commands = commands.map(cmd => {return '!'+cmd.name})
+
+                commands.map(cmd => {
+                    if(cmd == "!test" || cmd == "!quiz")
+                        return
+                    msg.channel.send(cmd)
+                })
             }
         }
     }
