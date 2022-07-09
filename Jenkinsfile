@@ -6,6 +6,7 @@ pipeline {
     agent any
     environment{
         CI = 'true'
+        GITHUB_TOKEN = credentials('github-access-token')
     }
     options {
         skipStagesAfterUnstable()
@@ -31,7 +32,7 @@ pipeline {
                 not {tag 'release-v*'}
             }
             steps{
-                GITHUB_TOKEN = credentials('github-access-token')
+                
                 echo "${getGitBranchName()}}"
                 sh """
                     ls -lah
