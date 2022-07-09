@@ -31,14 +31,17 @@ pipeline {
                 not {tag 'release-v*'}
             }
             steps{
-                withCredentials([string(credentialsId: 'github-access-token', variable: 'GITHUB_TOKEN')]) {
-                    sh """
-                        git fetch --all
-                        git checkout staging
-                        git merge + ${getGitBranchName()}
-                        git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
-                    """
-                }
+                GITHUB_TOKEN = credentials('github-access-token')
+                echo "${getGitBranchName()}}"
+                sh """
+                    ls -lah
+                    git branch
+                    git fetch --all
+                    git checkout staging
+                    git merge + ${getGitBranchName()}
+                    git push https://${GITHUB_TOKEN}@github.com/samikool/TarkovDiscordBot.git
+                """
+                
             }
         }
         stage('Deploy to staging'){
