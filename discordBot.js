@@ -59,7 +59,7 @@ client.on('messageCreate', async function(msg) {
             let path = await db.getImageFolderByCommandID(cmd.id)
             path = path[0]
             
-            path = pathh.resolve('/', 'discordbot', 'images', path.path
+            path = pathh.resolve('/', 'discordbot', 'images', path.path)
             file_list = fs.readdirSync(path)
 
             let random =  Math.round(Math.random() * (file_list.length - 1))
