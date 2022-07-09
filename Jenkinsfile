@@ -46,7 +46,8 @@ pipeline {
                 sh "git config user.email sam.morgan44@gmail.com"
                 sh "git config user.name Jenkins"
                 sh "git checkout staging"
-                sh "git merge ${getGitBranchName()} --squash -m \"jenkins merging ${getGitBranchName()} into staging\""
+                sh "git merge ${getGitBranchName()} --squash "
+                sh "git commit --all -m \"jenkins merging ${getGitBranchName()} into staging\""
                 sh "git push"
             }
         }
