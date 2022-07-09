@@ -16,8 +16,8 @@ pipeline {
             steps {
                 sh """
                     git fetch --all
-                    git pull --all
                     git checkout ${getGitBranchName()}
+                    git pull --all
                 """
             }
         }
