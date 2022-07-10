@@ -22,7 +22,7 @@ client.on('ready', async function ()  {
     quizzer = new Quizzer(Client, client);
 });
 
-client.on('messageCreate', async function(msg) {
+client.on('message', async function(msg) {
 
     // if(msg.channel.type === 'text'){
     //     if(msg.content.includes("#")){
