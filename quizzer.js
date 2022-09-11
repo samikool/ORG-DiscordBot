@@ -1,277 +1,280 @@
-const moment = require("moment");
-const SERVER_ID = process.env.SERVER_ID;
-const QUIZ_TAKER_ROLE_ID = process.env.QUIZ_TAKER_ROLE_ID;
-const TRIGGERED_SHIT_LORD_ROLE_ID = process.env.TRIGGERED_SHIT_LORD_ROLE_ID;
-const fetch = require("node-fetch");
-const timer = require("timers");
+// const SERVER_ID = process.env.SERVER_ID;
+// const QUIZ_TAKER_ROLE_ID = process.env.QUIZ_TAKER_ROLE_ID;
+// const TRIGGERED_SHIT_LORD_ROLE_ID = process.env.TRIGGERED_SHIT_LORD_ROLE_ID;
+// // const fetch = require("node-fetch");
+// // const timer = require("timers");
 
-class Quizzer{
-    constructor(Discord, client){
-        this.Discord = Discord;
-        this.client = client
-        this.quiztakers = {};
-        this.currentQuiztakers = {};
+// import fetch from 'node-fetch';
+// import timer from 'timers'
+
+
+// export class Quizzer{
+//     constructor(Discord, client){
+//         this.Discord = Discord;
+//         this.client = client
+//         this.quiztakers = {};
+//         this.currentQuiztakers = {};
         
-        this.startUpdateQuiztakerInterval()
-    }
-    /**
-     * Function sets intervald to store people in quiztaker role in the quiztakers map
-     */
-    async startUpdateQuiztakerInterval(){
-        timer.setInterval(async () => {
-            let guild = await this.client.guilds.cache.get(SERVER_ID);
+//         this.startUpdateQuiztakerInterval()
+//     }
+//     /**
+//      * Function sets intervald to store people in quiztaker role in the quiztakers map
+//      */
+//     async startUpdateQuiztakerInterval(){
+//         timer.setInterval(async () => {
+//             let guild = await this.client.guilds.cache.get(SERVER_ID);
 
-            guild.roles.cache.get(QUIZ_TAKER_ROLE_ID).members.forEach((user) => {
-                this.quiztakers[user.id] = {};
-            })
-        }, 5000);
-    }
+//             guild.roles.cache.get(QUIZ_TAKER_ROLE_ID).members.forEach((user) => {
+//                 this.quiztakers[user.id] = {};
+//             })
+//         }, 5000);
+//     }
 
-    /**
-     * Function takes a userID and returns true if user is taking quiz
-     * @param {*} userID user id of user 
-     */
-    isTakingQuiz(userID){
-        return this.currentQuiztakers[userID] ? true : false;
-    }
+//     /**
+//      * Function takes a userID and returns true if user is taking quiz
+//      * @param {*} userID user id of user 
+//      */
+//     isTakingQuiz(userID){
+//         return this.currentQuiztakers[userID] ? true : false;
+//     }
 
-    /**
-     * Function takes a userID and returns true if user is a quiztaker
-     * @param {*} userID user id of user
-     */
-    isQuizTaker(userID){
-        return this.quiztakers[userID] ? true : false;
-    }
+//     /**
+//      * Function takes a userID and returns true if user is a quiztaker
+//      * @param {*} userID user id of user
+//      */
+//     isQuizTaker(userID){
+//         return this.quiztakers[userID] ? true : false;
+//     }
     
-    addQuiztaker(){
+//     addQuiztaker(){
 
-    }
+//     }
 
-    removeQuiztaker(){
+//     removeQuiztaker(){
 
-    }
+//     }
 
-    /**
-     * Takes userID and answer and checks if it correct
-     * @param {*} userID 
-     * @param {*} answer 
-     */
-    async checkAnswer(userID, answer){
-        let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
-        //secret code to get out of quiz
-        if(answer.toLowerCase() === 'trey is a pussy'){
-            console.log(member.displayName + " typed the secret code")
-            this.finishQuiz(userID)
-            return
+//     /**
+//      * Takes userID and answer and checks if it correct
+//      * @param {*} userID 
+//      * @param {*} answer 
+//      */
+//     async checkAnswer(userID, answer){
+//         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
+//         //secret code to get out of quiz
+//         if(answer.toLowerCase() === 'trey is a pussy'){
+//             console.log(member.displayName + " typed the secret code")
+//             this.finishQuiz(userID)
+//             return
 
-        }
+//         }
 
-        if(this.currentQuiztakers[userID].question.answer.toLowerCase() === answer.toLowerCase()){
-            this.correctAnswer(userID)
-            console.log(member.displayName + " answered a question correctly")
-        }else{
-            this.wrongAnswer(userID)
-            console.log(member.displayName + " answered a question incorrectly")
-        }
-    }
+//         if(this.currentQuiztakers[userID].question.answer.toLowerCase() === answer.toLowerCase()){
+//             this.correctAnswer(userID)
+//             console.log(member.displayName + " answered a question correctly")
+//         }else{
+//             this.wrongAnswer(userID)
+//             console.log(member.displayName + " answered a question incorrectly")
+//         }
+//     }
 
-    /**
-     * Function is called if user answered a question correctly 
-     * If they answered 3 correctly it calls @finishQuiz to restore their permissions and end the quiz
-     * If not it calls @sendQuestion to send them another question
-     * @param {} userID 
-     */
-    async correctAnswer(userID){
-        this.currentQuiztakers[userID].correct += 1;
-        if(this.currentQuiztakers[userID].correct === 3){
-            this.finishQuiz(userID)
-        }else{
-            this.client.users.cache.get(userID).send("Lucky bastard...")
-            this.sendQuestion(userID)
-        }
-    }
+//     /**
+//      * Function is called if user answered a question correctly 
+//      * If they answered 3 correctly it calls @finishQuiz to restore their permissions and end the quiz
+//      * If not it calls @sendQuestion to send them another question
+//      * @param {} userID 
+//      */
+//     async correctAnswer(userID){
+//         this.currentQuiztakers[userID].correct += 1;
+//         if(this.currentQuiztakers[userID].correct === 3){
+//             this.finishQuiz(userID)
+//         }else{
+//             this.client.users.cache.get(userID).send("Lucky bastard...")
+//             this.sendQuestion(userID)
+//         }
+//     }
 
-    /**
-     * Function is called if the user incorrectly answered a question
-     * They will be insulted and then sent another question
-     * @param {*} userID 
-     */
-    async wrongAnswer(userID){
-        this.client.users.cache.get(userID).send("Lmao... you actually got that wrong?")
-        this.sendQuestion(userID)
-    }
+//     /**
+//      * Function is called if the user incorrectly answered a question
+//      * They will be insulted and then sent another question
+//      * @param {*} userID 
+//      */
+//     async wrongAnswer(userID){
+//         this.client.users.cache.get(userID).send("Lmao... you actually got that wrong?")
+//         this.sendQuestion(userID)
+//     }
 
-    /**
-     * Takes a userID and calls the functions necessary to start giving them a quiz
-     * @param {*} userID is the user id of the user
-     */
-    async startQuiz(userID){
-        //set up current quiztaker object
-        this.currentQuiztakers[userID] = {
-            question: null,
-            correct: 0,
-            firstQuestion: true,
-        }
-        //remove their permissions
-        this.takePermissions(userID);
-        //give them the testtaker permissions
-        this.giveTestPermissions(userID);
-        //send them a question
-        this.sendQuestion(userID)
-    }
+//     /**
+//      * Takes a userID and calls the functions necessary to start giving them a quiz
+//      * @param {*} userID is the user id of the user
+//      */
+//     async startQuiz(userID){
+//         //set up current quiztaker object
+//         this.currentQuiztakers[userID] = {
+//             question: null,
+//             correct: 0,
+//             firstQuestion: true,
+//         }
+//         //remove their permissions
+//         this.takePermissions(userID);
+//         //give them the testtaker permissions
+//         this.giveTestPermissions(userID);
+//         //send them a question
+//         this.sendQuestion(userID)
+//     }
 
-    /**
-     * Function takes a userID and 
-     * @param {*} userID is the user id of the user 
-     */
-    async finishQuiz(userID){
-        //restire their permissions
-        this.restorePermissions(userID);
-        //congradulate/insult them
-        this.client.users.cache.get(userID).send("Congrats you actually managed to pass a quiz for once!")
-        //remove them from currentquizztaker map
-        delete this.currentQuiztakers[userID]
-    }
+//     /**
+//      * Function takes a userID and 
+//      * @param {*} userID is the user id of the user 
+//      */
+//     async finishQuiz(userID){
+//         //restire their permissions
+//         this.restorePermissions(userID);
+//         //congradulate/insult them
+//         this.client.users.cache.get(userID).send("Congrats you actually managed to pass a quiz for once!")
+//         //remove them from currentquizztaker map
+//         delete this.currentQuiztakers[userID]
+//     }
 
-    /**
-     * Function takes a userID and saves the users current roles and then takes them away
-     * @param {*} userID 
-     */
-    async takePermissions(userID){
-        //get member
-        let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
-        //get their roles (string of role id)
-        let roles = member._roles;
+//     /**
+//      * Function takes a userID and saves the users current roles and then takes them away
+//      * @param {*} userID 
+//      */
+//     async takePermissions(userID){
+//         //get member
+//         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
+//         //get their roles (string of role id)
+//         let roles = member._roles;
         
-        //save roles
-        this.currentQuiztakers[userID].roles = roles;
+//         //save roles
+//         this.currentQuiztakers[userID].roles = roles;
 
-        //for each role remove it
-        roles.forEach((role) => {
-            member.roles.remove(role);
-        })
-    }
+//         //for each role remove it
+//         roles.forEach((role) => {
+//             member.roles.remove(role);
+//         })
+//     }
 
-    /**
-     * Function takes a userID and adds them to the triggered shit lord group and mutes them
-     * @param {*} userID 
-     */
-    async giveTestPermissions(userID){
-        let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
-        member.roles.add(TRIGGERED_SHIT_LORD_ROLE_ID)
+//     /**
+//      * Function takes a userID and adds them to the triggered shit lord group and mutes them
+//      * @param {*} userID 
+//      */
+//     async giveTestPermissions(userID){
+//         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
+//         member.roles.add(TRIGGERED_SHIT_LORD_ROLE_ID)
 
-        //mute if incase they aren't connected to chat
-        if(member.voice.channelID) member.voice.setMute(true)
-    }
+//         //mute if incase they aren't connected to chat
+//         if(member.voice.channelID) member.voice.setMute(true)
+//     }
 
-    /**
-     * Function takes a userID and restores their permissions that were saved before the test was started 
-     * @param {*} userID 
-     */
-    async restorePermissions(userID){
-        let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
+//     /**
+//      * Function takes a userID and restores their permissions that were saved before the test was started 
+//      * @param {*} userID 
+//      */
+//     async restorePermissions(userID){
+//         let member = this.client.guilds.resolve(SERVER_ID).members.cache.get(userID);
 
-        //remove truggered shit lord
-        member.roles.remove(TRIGGERED_SHIT_LORD_ROLE_ID)
+//         //remove truggered shit lord
+//         member.roles.remove(TRIGGERED_SHIT_LORD_ROLE_ID)
 
-        //restore old roles
-        let oldRoles = this.currentQuiztakers[userID].roles;
-        oldRoles.forEach((role) => {
-            member.roles.add(role)
-        })
+//         //restore old roles
+//         let oldRoles = this.currentQuiztakers[userID].roles;
+//         oldRoles.forEach((role) => {
+//             member.roles.add(role)
+//         })
 
-        //unmute
-        if(member.voice.channelID) member.voice.setMute(false)
-    }
+//         //unmute
+//         if(member.voice.channelID) member.voice.setMute(false)
+//     }
 
-    /**
-     * Takes a userID and stores their question and then sends it to them
-     * @param {*} userID 
-     */
-    async sendQuestion(userID){
-        let question = await this.getQuestionFromAPI();
-        this.currentQuiztakers[userID].question = question;
+//     /**
+//      * Takes a userID and stores their question and then sends it to them
+//      * @param {*} userID 
+//      */
+//     async sendQuestion(userID){
+//         let question = await this.getQuestionFromAPI();
+//         this.currentQuiztakers[userID].question = question;
 
-        //start with empty message
-        let message = '';
+//         //start with empty message
+//         let message = '';
 
-        //if their first question add an introduciton
-        if(this.currentQuiztakers[userID].firstQuestion){
+//         //if their first question add an introduciton
+//         if(this.currentQuiztakers[userID].firstQuestion){
             
-            message += "Hey there it is time for your Quiz!" + 
-            " Remember you did this to yourself and nobody else is to blame you silly piece of shit." + 
-            " Have fun with your quiz, hope to talk to you soon!\n";
+//             message += "Hey there it is time for your Quiz!" + 
+//             " Remember you did this to yourself and nobody else is to blame you silly piece of shit." + 
+//             " Have fun with your quiz, hope to talk to you soon!\n";
             
-            this.currentQuiztakers[userID].firstQuestion = false;
-        }
+//             this.currentQuiztakers[userID].firstQuestion = false;
+//         }
 
-        //either way add the category
-        message += "The category is " + this.currentQuiztakers[userID].question.category + "\n";
+//         //either way add the category
+//         message += "The category is " + this.currentQuiztakers[userID].question.category + "\n";
 
-        //if true of false add this at start of question
-        if(this.currentQuiztakers[userID].question.type === 'boolean'){
-            message += "True or False: ";
-        }
+//         //if true of false add this at start of question
+//         if(this.currentQuiztakers[userID].question.type === 'boolean'){
+//             message += "True or False: ";
+//         }
         
-        //of course add the question
-        message += this.currentQuiztakers[userID].question.question + "\n"
+//         //of course add the question
+//         message += this.currentQuiztakers[userID].question.question + "\n"
 
-        //if question type is multiple add the choices
-        if(this.currentQuiztakers[userID].question.type === 'multiple'){
-            let choices = this.currentQuiztakers[userID].question.choices;
-            choices.push(this.currentQuiztakers[userID].question.answer)
+//         //if question type is multiple add the choices
+//         if(this.currentQuiztakers[userID].question.type === 'multiple'){
+//             let choices = this.currentQuiztakers[userID].question.choices;
+//             choices.push(this.currentQuiztakers[userID].question.answer)
             
-            //This shit somehow randomly shuffles the array
-            choices.sort(() => Math.random()- 0.5);
-            message += "Choices: "
+//             //This shit somehow randomly shuffles the array
+//             choices.sort(() => Math.random()- 0.5);
+//             message += "Choices: "
 
-            //this adds quotes around the choices to make them more clear - some were printing weirdly
-            choices.forEach((choice) => {
-                message += '\''+choice+"\', ";
-            })
-        }
+//             //this adds quotes around the choices to make them more clear - some were printing weirdly
+//             choices.forEach((choice) => {
+//                 message += '\''+choice+"\', ";
+//             })
+//         }
 
-        this.client.users.cache.get(userID).send(message)
+//         this.client.users.cache.get(userID).send(message)
 
-    }
+//     }
 
-    /**
-     * This question gets a question fro the API and then returns it
-     * @returns {
-     * category: ,          category of question
-     * type: ,              type of question
-     * difficulty: ,        difficulty of question
-     * question: ,          question 
-     * answer: ,            answer
-     * choices: ,           choice
-     * }
-     */
-    async getQuestionFromAPI () {
-        let resp = await fetch("https://opentdb.com/api.php?amount=1",);
-        resp = await resp.json();
-        let questionObj = resp.results[0];
+//     /**
+//      * This question gets a question fro the API and then returns it
+//      * @returns {
+//      * category: ,          category of question
+//      * type: ,              type of question
+//      * difficulty: ,        difficulty of question
+//      * question: ,          question 
+//      * answer: ,            answer
+//      * choices: ,           choice
+//      * }
+//      */
+//     async getQuestionFromAPI () {
+//         let resp = await fetch("https://opentdb.com/api.php?amount=1",);
+//         resp = await resp.json();
+//         let questionObj = resp.results[0];
         
-        questionObj.question = questionObj.question.replace(/&#039;/g, "\'");
-        questionObj.question = questionObj.question.replace(/&quot;/g, "\"");
-        questionObj.correct_answer = questionObj.correct_answer.replace(/&#039;/g, "\'");
-        questionObj.correct_answer = questionObj.correct_answer.replace(/&quot;/g, "\"");
-        questionObj.incorrect_answers.forEach((inc_answer,i) => {
-            questionObj.incorrect_answers[i] = inc_answer.replace(/&#039;/g, "\'");
-            questionObj.incorrect_answers[i] = inc_answer.replace(/&quot;/g, "\"");
-        })
+//         questionObj.question = questionObj.question.replace(/&#039;/g, "\'");
+//         questionObj.question = questionObj.question.replace(/&quot;/g, "\"");
+//         questionObj.correct_answer = questionObj.correct_answer.replace(/&#039;/g, "\'");
+//         questionObj.correct_answer = questionObj.correct_answer.replace(/&quot;/g, "\"");
+//         questionObj.incorrect_answers.forEach((inc_answer,i) => {
+//             questionObj.incorrect_answers[i] = inc_answer.replace(/&#039;/g, "\'");
+//             questionObj.incorrect_answers[i] = inc_answer.replace(/&quot;/g, "\"");
+//         })
 
-        //console.log(questionObj)
+//         //console.log(questionObj)
 
-        return {
-            category: questionObj.category,
-            type: questionObj.type,
-            difficulty: questionObj.difficulty,
-            question: questionObj.question,
-            answer: questionObj.correct_answer,
-            choices: questionObj.incorrect_answers,
-        };
-    }  
+//         return {
+//             category: questionObj.category,
+//             type: questionObj.type,
+//             difficulty: questionObj.difficulty,
+//             question: questionObj.question,
+//             answer: questionObj.correct_answer,
+//             choices: questionObj.incorrect_answers,
+//         };
+//     }  
 
-}
+// }
 
-module.exports = Quizzer;
+// // module.exports = Quizzer;
