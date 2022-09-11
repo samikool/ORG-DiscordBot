@@ -1,7 +1,6 @@
 {
   "name": "tarkovdiscordbot",
   "version": "1.0.0",
-  "type": "module",
   "description": "This bot is fucking sick yo",
   "main": "discordBot.js",
   "dependencies": {
