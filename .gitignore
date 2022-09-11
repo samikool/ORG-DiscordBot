@@ -5,3 +5,6 @@ node_modules
 scripts
 package-lock.json
 nodemon.json
+commands/
+commands.json
+json-to-js.js

@@ -1,102 +1,75 @@
-//TODO: Temp import of require will fix later on clean up for 1.0
-import { createRequire } from 'module';
-import { exit } from 'process';
-import dotenv from 'dotenv'
-import * as cmd_manager from './commandManager.js'
-import * as print from './printer.js'
-
-const require = createRequire(import.meta.url);
+//TODO: Temp import of require will fix later on clean up for 1.
+require('dotenv').config()
+const {exit} = require('process')
 const {Client, Intents, REST, Routes} = require('discord.js');
 const client = new Client({intents: 0xFFFF});
-const rest = new REST({version: 10}).setToken(process.env.TOKEN)
 
-dotenv.config()
-cmd_manager.init("commands.json")
 
+const {get_command_by_name, init_commands} = require('./command_manager.js')
+const {success, info, warning, error} = require('./printer.js')
 /**
  * Function is first event called by discordBot
  * Initializing stuff goes here
  */
 client.on('ready', async function ()  {
-    print.success(`Logged in as ${client.user.tag}!`);
-    print.info("Registering commands...")
+    success(`Logged in as ${client.user.tag}!`);
+    info("Registering commands...")
 
-    if(await register_commands(cmd_manager.get_register_commands()))
+    if(init_commands(client))
     {
-        print.error("Error registering commands...")
+        error("Error registering commands...")
         exit(1)
     }
-    print.success("Commands registered successfully.")
+    success("Commands registered successfully.")
 });
 
-async function register_commands(commands) 
+async function run_test(interaction, cmd)
 {
-    // await rest.put(Routes.applicationCommands(process.env.BOT_ID), {body: commands});
-    return 0;
+    if(await cmd.get_response(interaction))
+    {
+        error("Tests failed.")
+        exit(1)
+    }
+    else
+    {
+        success("Tests passed.")
+        exit(0);
+    }
 }
 
-async function run_test(msg)
-{
-    //test function will be implemented for real later
-    let cmds = cmd_manager.get_register_commands();
-    cmds = cmds.map(cmd => {return '!'+cmd.name})
-
-    cmds.forEach(cmd => {
-        print.info(`Testing: ${cmd}`)
-        msg.channel.send(cmd);
-    })
-
-    return 0;
-}
 
 client.on('interactionCreate', async interaction => {
     if(!interaction.isChatInputCommand()) return;
+    
+    const cmd = get_command_by_name(interaction.commandName)
+    if(!cmd) {
+        warning(`Tried to execute unregistered command: ${interaction.commandName}`);
+        return;
+    }
 
-    let rsp = await cmd_manager.execute_command(interaction.commandName)
-    interaction.reply(rsp)
+    info(`command: ${cmd.data.name}`);
+
+    if(interaction.commandName == "test")
+        await run_test(interaction, cmd)
+
+    try{
+        interaction.reply(await cmd.get_response(interaction))
+    } 
+    catch (e) { 
+        await interaction.reply({content: "Error executing command", ephemeral: true})
+        error(e)
+    }
+    
 });
 
-client.on('messageCreate', async function(msg) {
-
-    // if(msg.channel.type === 'text'){
-    //     if(msg.content.includes("#")){
-    //         msg.delete({reason: "Hashtags are not longer allowed to promote a safe and healthy discord enviornemnt."})
-    //         msg.channel.send("Sorry hashtags are no longer allowed for your safety")
-    //     }
-    // }
-
-    if (msg.content.startsWith('!')) {
-        let cmd_name = msg.content.split(' ')[0]
-        cmd_name = cmd_name.replace('!','')
-
-        if(cmd_name == "test"){
-            print.info("running tests")
-            if(msg.author.id != '379844352714997761') 
-            {
-                console.log("User " + msg.author.name + " not authorized to test.")
-                return
-            }
-
-            if(!await run_test(msg))
-                return;
-            else
-                exit(1)
-        }
-
-        let resp = await cmd_manager.execute_command(cmd_name)
-        if(resp) 
-            msg.channel.send(resp);
-        else
-            print.warning(`Command: ${cmd_name} not found...`);
-    }
-})
+client.on('messageCreate', async function(msg) {})
 
 client.on('error', (e) => {
-    print.error(e)
+    error(e)
 })
 
 client.on('shardError', (e, i) =>{
-    print.error(i, e)
+    error(i, e)
 })
 
 async function login(){
