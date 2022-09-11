@@ -4,3 +4,4 @@ node_modules
 *.sql
 scripts
 package-lock.json
+nodemon.json
