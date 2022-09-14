@@ -39,14 +39,14 @@ async function register_commands()
 
 function watch_cmd_dir()
 {
-    fs.watch(process.env.CMD_DIR, null, 
+    fs.watch(process.env.CMD_DIR, 
         (event_type, file_name) => cmd_watch_callback(event_type, file_name)
     );
 }
 
 function watch_img_dir()
 {
-    fs.watch(process.env.IMG_DIR, null, 
+    fs.watch(process.env.IMG_DIR, {}, 
         (event_type, file_name) => img_watch_callback(event_type, file_name)
     );
 }
@@ -54,7 +54,7 @@ function watch_img_dir()
 function cmd_watch_callback(event_type, file_name)
 {
     if(!file_name.endsWith('.js')) return;
-
+    
     let cmd_name = file_name.slice(0, -3);
     if(commands[cmd_name])
     {   
@@ -80,13 +80,19 @@ function add_command(file_name)
         const path = `${process.env.CMD_DIR}${file_name}`;
         const command = require(path);
 
+        if(JSON.stringify(command) == '{}') {
+            warning(`Nothing exported from file ${file_name}`);
+            delete require.cache[path];
+            return;
+        }
+
         if(!command.data 
             || !command.data.name 
             || !command.data.description 
             || !command.get_response)
         {
             throw new SyntaxError(
-                "Command is malformed must have: data.name, data,description, and get_response defined as a minimum"
+                `Command is malformed must have: data: ${command.data} data.name: ${!command.data.name}, data,description: ${command.data.name}, and get_response: ${command.get_response} defined at a minimum`
             );
         }
         commands[command.data.name] = command;
@@ -106,7 +112,6 @@ function img_watch_callback(event_type, file_name)
 {
     if(event_type == 'change')
         return; //don't need to update anything on change
-    
     add_img_command(file_name);
 }
 
