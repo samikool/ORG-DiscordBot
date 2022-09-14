@@ -46,7 +46,7 @@ function watch_cmd_dir()
 
 function watch_img_dir()
 {
-    fs.watch(process.env.IMG_DIR, {}, 
+    fs.watch(process.env.IMG_DIR,
         (event_type, file_name) => img_watch_callback(event_type, file_name)
     );
 }
