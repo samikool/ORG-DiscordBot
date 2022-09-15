@@ -1,0 +1,24 @@
+name: Build
+on: 
+  workflow_call:
+    secrets:
+      DOTENV:
+        required: true
+        description: dotenv file to use in the build
+
+jobs:
+  build:
+    runs-on:
+      self-hosted
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3.0.2
+      - name: get .env 
+        run: |
+          cp ${{ secrets.DOTENV }} .env
+      - name: build-env
+        run: |
+          docker build -t discordbot-env:${{ github.ref_name }} -f ci/Dockerfile.build-env .
+      - name: build-image
+        run: |
+          docker build --build-arg build_env=${{ github.ref_name }} -t discordbot:${{ github.ref_name }} -f ci/Dockerfile .

@@ -1,0 +1,16 @@
+name: Test Build
+on:
+  workflow_call:
+    secrets:
+      IMG_DIR:
+        description: Image directory to mount when running self-test
+      CMD_DIR:
+        description: Command directory to mount when running self-test
+
+jobs:
+  self-test:
+    runs-on: 
+      self-hosted
+    steps:
+      - name: Run self-test
+        run: sh ./ci/test.sh

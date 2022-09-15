@@ -1,0 +1,35 @@
+name: branch-build
+on:
+  push:
+    branches-ignore:
+      - 'staging'
+      - 'master'
+jobs:
+  build:
+    name: ${{ github.ref_name }}-build
+    uses: ./.github/workflows/build.yaml
+    secrets:
+      DOTENV: ${{ secrets.DOTENV_STAGING }}
+
+  test:
+    needs: build
+    name: ${{ github.ref_name }}-test
+    uses: ./.github/workflows/test.yaml
+    secrets:
+      CMD_DIR: ${{ secrets.CMD_DIR_STAGING }}
+      IMG_DIR: ${{ secrets.IMG_DIR_STAGING }}
+
+  clean:
+    needs: test
+    runs-on: self-hosted
+    name: ${{ github.ref_name }}-clean
+    steps:
+      - name: remove container
+        run: |
+          echo remove test container when added...
+      - name: remove image-env
+        run: |
+          docker image rm discordbot-env:${{ github.ref_name }}
+      - name: remove image
+        run: |
+          docker image rm discordbot:${{ github.ref_name }}

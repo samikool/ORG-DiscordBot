@@ -1,0 +1,27 @@
+name: staging-build
+on:
+  push:
+    branches:
+      - 'staging'
+jobs:
+  build:
+    name: staging-build
+    uses: ./.github/workflows/build.yaml
+    secrets:
+      DOTENV: ${{ secrets.DOTENV_STAGING }}
+
+  test:
+    needs: build
+    name: staging-test
+    uses: ./.github/workflows/test.yaml
+    secrets:
+      CMD_DIR: ${{ secrets.CMD_DIR_STAGING }}
+      IMG_DIR: ${{ secrets.IMG_DIR_STAGING }}
+  
+  push-to-master:
+    needs: test
+    runs-on: self-hosted
+    name: push-to-master
+    steps:
+      - name: push-to-master
+        run: git push origin staging:master

@@ -8,3 +8,4 @@ nodemon.json
 commands/
 commands.json
 json-to-js.js
+.dockerignore

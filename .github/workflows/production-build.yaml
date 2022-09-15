@@ -1,0 +1,47 @@
+name: production-build
+on:
+  push: 
+    branches:
+      - 'master'
+jobs:
+  build:
+    name: production-build
+    uses: ./.github/workflows/build.yaml
+    secrets:
+      DOTENV: ${{ secrets.DOTENV_PRODUCTION }}
+
+  test:
+    needs: build
+    name: staging-test
+    uses: ./.github/workflows/test.yaml
+    secrets:
+      CMD_DIR: ${{ secrets.CMD_DIR_PRODUCTION }}
+      IMG_DIR: ${{ secrets.IMG_DIR_PRODUCTION }}
+
+  deploy:
+    needs: test
+    name: deploy-production
+    steps:
+      - name: stop production
+        run: |
+          docker container stop discordbot-production
+      - name: remove outdated container
+        run: |  
+          docker container rm discordbot-production
+      - name: 
+        run: |
+          docker run -i -t -d -restart always --name discordbot-production \
+          -v /discordbot/images:/discordbot/images \
+          -v /discordbot/commands:/discordbot/commands \
+          discordbot:production
+
+  tag-revert:
+    name: tag revert commit
+    runs-on:
+      self-hosted
+    steps:
+      - name: tag commit
+        run: echo tagging
+      - nmae: 
+        run: echo pushing
+      
