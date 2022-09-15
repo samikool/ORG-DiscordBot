@@ -1,0 +1,4 @@
+FROM node:latest
+
+#Update npm
+RUN npm install -g npm@latest
