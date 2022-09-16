@@ -7,7 +7,6 @@ on:
 jobs:
   build:
     name: production-build
-    runs-on: self-hosted
     uses: ./.github/workflows/build.yaml
     secrets:
       DOTENV: ${{ secrets.DOTENV_PRODUCTION }}
@@ -15,7 +14,6 @@ jobs:
   test:
     needs: build
     name: production-test
-    runs-on: self-hosted
     uses: ./.github/workflows/test.yaml
     secrets:
       CMD_DIR: ${{ secrets.CMD_DIR_PRODUCTION }}
@@ -23,16 +21,13 @@ jobs:
 
   deploy:
     needs: test
-    name: deploy-production
+    name: production-deploy
     runs-on: self-hosted
     steps:
-      - name: stop production
-        run: |
-          docker container stop discordbot-production
-      - name: remove outdated container
+      - name: stop & remove outdated container
         run: |  
-          docker container rm discordbot-production
-      - name: 
+          docker container rm -f discordbot-production
+      - name: start production
         run: |
           docker run -i -t -d --restart always --name discordbot-production \
           -v /discordbot/images:/discordbot/images \
@@ -44,8 +39,8 @@ jobs:
     runs-on:
       self-hosted
     steps:
-      - name: tag commit
+      - name: create tag
         run: echo tagging
-      - nmae: 
+      - name: push tag 
         run: echo pushing
       
