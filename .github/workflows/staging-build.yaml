@@ -23,5 +23,10 @@ jobs:
     runs-on: self-hosted
     name: push-to-master
     steps:
+      - uses: actions/checkout@v3.0.2
+        with:
+          token: ${{ github.TOKEN }}
+      - name: fetch
+        run: git fetch --all
       - name: push-to-master
-        run: git push origin staging:master
+        run: git push -f origin staging:master #TODO: remove force after CI settles
