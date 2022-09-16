@@ -24,12 +24,9 @@ jobs:
     name: production-deploy
     runs-on: self-hosted
     steps:
-      - name: stop production
-        run: |
-          docker container stop discordbot-production
-      - name: remove outdated container
+      - name: stop & remove outdated container
         run: |  
-          docker container rm discordbot-production
+          docker container rm -f discordbot-production
       - name: start production
         run: |
           docker run -i -t -d --restart always --name discordbot-production \
