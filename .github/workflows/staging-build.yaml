@@ -23,5 +23,10 @@ jobs:
     runs-on: self-hosted
     name: push-to-master
     steps:
-      - name: push-to-master
-        run: git push origin staging:master
+      - uses: actions/checkout@v3.0.2
+        with:
+          token: ${{ secrets.PAT }}
+      - name: fetch
+        run: git fetch --all
+      - name: push to master
+        run: git push -f origin staging:master
