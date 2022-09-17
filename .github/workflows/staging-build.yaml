@@ -21,7 +21,7 @@ jobs:
   push-to-master:
     needs: test
     runs-on: self-hosted
-    name: push-to-master
+    name: push-to-masterr
     steps:
       - uses: actions/checkout@v3.0.2
         with:
