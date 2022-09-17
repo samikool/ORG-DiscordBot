@@ -28,7 +28,7 @@ jobs:
           token: ${{ github.TOKEN }}
           fetch-depth: '0'
       - name: fetch
-        run: git fetch --all --unshallow
+        run: git fetch --all
       - name: checkout master
         run: git checkout master
       - name: merge staging
