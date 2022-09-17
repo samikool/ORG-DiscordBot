@@ -1,7 +1,7 @@
 name: production-build
 on:
   push:
-    braches:
+    branches:
       - 'master'
 
 jobs:
