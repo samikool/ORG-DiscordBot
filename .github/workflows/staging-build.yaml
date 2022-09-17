@@ -29,4 +29,4 @@ jobs:
       - name: fetch
         run: git fetch --all
       - name: push-to-master
-        run: git push -f origin staging:master #TODO: remove force after CI settles
+        run: git push origin staging:master
