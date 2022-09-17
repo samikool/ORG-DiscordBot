@@ -12,5 +12,20 @@ jobs:
     runs-on: 
       self-hosted
     steps:
-      - name: Run self-test
-        run: sh ./ci/test.sh
+      - name: run test
+        run: |
+          docker run --name discordbot-test \
+          -v ${{ secrets.IMG_DIR }}:${{ secrets.IMG_DIR }} \
+          -v ${{ secrets.CMD_DIR }}:${{ secrets.CMD_DIR }} \
+          discordbot:${{ github.ref_name }} \
+          node /app/discordBot.js test
+
+  remove-container:
+    needs: self-test
+    if: always()
+    runs-on:
+      self-hosted
+    steps:
+      - name: remove test container
+        run: |
+          docker container rm discordbot-test

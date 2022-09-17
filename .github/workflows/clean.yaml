@@ -1,0 +1,15 @@
+name: Clean
+on: 
+  workflow_call:
+
+jobs:
+  clean:
+    runs-on: self-hosted
+    name: ${{ github.ref_name }}-clean
+    steps:
+      - name: remove image-env
+        run: |
+          docker image rm discordbot-env:${{ github.ref_name }}
+      - name: remove image
+        run: |
+          docker image rm discordbot:${{ github.ref_name }}

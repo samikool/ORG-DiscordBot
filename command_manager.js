@@ -7,7 +7,6 @@ const commands = {};
 
 function init_commands(client)
 {
-    client = client;
     load_commands(client);
     register_commands(client);
     watch_cmd_dir();

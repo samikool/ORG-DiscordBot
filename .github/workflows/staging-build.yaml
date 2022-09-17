@@ -30,3 +30,9 @@ jobs:
         run: git fetch --all
       - name: push to master
         run: git push -f origin staging:master
+
+  clean:
+    needs: test
+    if: always()
+    name: staging-clean
+    uses: ./.github/workflows/clean.yaml

@@ -1,12 +1,13 @@
 //TODO: Temp import of require will fix later on clean up for 1.
-require('dotenv').config()
-const {exit} = require('process')
+require('dotenv').config();
+const {exit} = require('process');
 const {Client, Intents, REST, Routes} = require('discord.js');
-const client = new Client({intents: 0xFFFF});
 
-
+const {self_test} = require('./self_test.js');
 const {get_command_by_name, init_commands} = require('./command_manager.js')
-const {success, info, warning, error} = require('./printer.js')
+const {success, info, warning, error} = require('./printer.js');
+
+const client = new Client({intents: 0xFFFF});
 /**
  * Function is first event called by discordBot
  * Initializing stuff goes here
@@ -20,22 +21,14 @@ client.on('ready', async function ()  {
         error("Error registering commands...")
         exit(1)
     }
-    success("Commands registered successfully.")
-});
 
-async function run_test(interaction, cmd)
-{
-    if(await cmd.get_response(interaction))
+    success("Commands registered successfully.")
+    
+    if(process.argv[2] == "test")
     {
-        error("Tests failed.")
-        exit(1)
+        self_test(client);
     }
-    else
-    {
-        success("Tests passed.")
-        exit(0);
-    }
-}
+});
 
 
 client.on('interactionCreate', async interaction => {
