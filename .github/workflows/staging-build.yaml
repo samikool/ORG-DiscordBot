@@ -26,12 +26,7 @@ jobs:
       - uses: actions/checkout@v3.0.2
         with:
           token: ${{ secrets.PAT }}
-          fetch-depth: '0'
       - name: fetch
         run: git fetch --all
-      - name: checkout master
-        run: git checkout master
-      - name: merge staging
-        run: git merge staging
-      - name: push master
-        run: git push
+      - name: push to master
+        run: git push -f origin staging:master
