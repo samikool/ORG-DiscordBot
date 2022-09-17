@@ -21,13 +21,13 @@ jobs:
   push-to-master:
     needs: test
     runs-on: self-hosted
-    name: push-to-masterr
+    name: push-to-master
     steps:
       - uses: actions/checkout@v3.0.2
         with:
           token: ${{ github.TOKEN }}
       - name: fetch
-        run: git fetch --all
+        run: git fetch --all --unshallow
       - name: checkout master
         run: git checkout master
       - name: merge staging
