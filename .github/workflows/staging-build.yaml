@@ -28,7 +28,9 @@ jobs:
           token: ${{ github.TOKEN }}
       - name: fetch
         run: git fetch --all
-      - name: merge-to-master
-        run: git merge staging master
-      - name: push-to-master
-        run: git push origin master
+      - name: checkout master
+        run: git checkout master
+      - name: merge staging
+        run: git merge staging
+      - name: push master
+        run: git push
