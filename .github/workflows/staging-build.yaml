@@ -30,6 +30,8 @@ jobs:
         run: git fetch --all --unshallow
       - name: checkout master
         run: git checkout master
+      - name: pull master
+        run: git pull
       - name: merge staging
         run: git merge staging
       - name: push master
