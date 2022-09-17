@@ -35,8 +35,3 @@ jobs:
         run: git merge staging
       - name: push master
         run: git push
-
-  trigger-production-deploy:
-    needs: push-to-master
-    name: trigger deploy
-    uses: ./.github/workflows/production-build.yaml
