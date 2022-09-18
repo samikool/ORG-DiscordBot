@@ -89,10 +89,12 @@ function add_command(file_name)
         if(!command.data 
             || !command.data.name 
             || !command.data.description 
-            || !command.get_response)
+            || !command.get_response
+            || !command.self_test
+        )
         {
             throw new SyntaxError(
-                `Command is malformed must have: data: ${command.data} data.name: ${!command.data.name}, data,description: ${command.data.name}, and get_response: ${command.get_response} defined at a minimum`
+                `Command is malformed must have: data: ${command.data} data.name: ${!command.data.name}, data,description: ${command.data.name}, get_response: ${command.get_response}, and self_test: ${command.self_test} defined at a minimum`
             );
         }
         commands[command.data.name] = command;
@@ -121,14 +123,22 @@ function get_img_command_file_string(cmd_name)
     const s = `const {get_img_response, get_img_album_response, get_text_response,} = require('./command_helper.js')
 const { SlashCommandBuilder } = require('discord.js');
 
+async function self_test(channel){
+    await channel.send(await get_response({}))
+    return true;
+}
+
+async function get_response(interaction){
+    return await get_img_response('${cmd_name}');
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('${cmd_name}')
         .setDescription('...'),
-    async get_response(interaction) {
-        return await get_img_response('${cmd_name}');
-    },
-};
+    get_response,
+    self_test,
+};    
 `;
     return s;
 }
