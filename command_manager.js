@@ -57,7 +57,8 @@ function cmd_watch_callback(event_type, file_name)
     let cmd_name = file_name.slice(0, -3);
     if(commands[cmd_name])
     {   
-        update_command(cmd_name, file_name);
+        remove_command(cmd_name, file_name);
+        add_command(file_name);
     }
     else
     {
@@ -99,12 +100,6 @@ function add_command(file_name)
         warning(`Unable to load command from ${file_name}`);
         warning(e);
     }
-}
-
-function update_command(cmd_name, file_name)
-{
-    remove_command(cmd_name, file_name);
-    add_command(file_name);
 }
 
 function img_watch_callback(event_type, file_name)
