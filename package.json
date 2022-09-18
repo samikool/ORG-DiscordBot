@@ -17,12 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/samikool/TarkovDiscordbot.git"
+    "url": "git+https://github.com/samikool/Discordbot.git"
   },
   "author": "Sam",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/samikool/TarkovDiscordbot/issues"
+    "url": "https://github.com/samikool/Discordbot/issues"
   },
-  "homepage": "https://github.com/samikool/TarkovDiscordbot#readme"
+  "homepage": "https://github.com/samikool/Discordbot#readme"
 }
