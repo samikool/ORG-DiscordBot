@@ -8,10 +8,8 @@ async function self_test(client) {
     let channel = process.env.ENV == 'staging' ? 
         await client.channels.fetch(staging_general_channel) : 
         await client.channels.fetch(production_bot_testing_channel);
-
-    info("Running self-test");
-
     try{
+        info("Running self-test");
         if(Object.keys(client.commands) == 0)
             throw new Error("No commands were found to test. Failing on purpose.");
 

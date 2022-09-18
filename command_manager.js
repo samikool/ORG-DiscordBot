@@ -9,8 +9,8 @@ function init_commands(client)
 {
     load_commands(client);
     register_commands(client);
-    watch_cmd_dir();
-    watch_img_dir();
+    init_cmd_dir_watch();
+    init_img_dir_watch();
 }
 
 function load_commands(client)
@@ -19,8 +19,7 @@ function load_commands(client)
         file.endsWith('.js') && file != 'command_helper.js'
     );
 
-    for(const file of command_files)
-    {
+    for(const file of command_files) {
         add_command(file, process.env.CMD_DIR);
     }
     client.commands = commands;
@@ -36,14 +35,14 @@ async function register_commands()
     return 0;
 }
 
-function watch_cmd_dir()
+function init_cmd_dir_watch()
 {
     fs.watch(process.env.CMD_DIR, 
         (event_type, file_name) => cmd_watch_callback(event_type, file_name)
     );
 }
 
-function watch_img_dir()
+function init_img_dir_watch()
 {
     fs.watch(process.env.IMG_DIR,
         (event_type, file_name) => img_watch_callback(event_type, file_name)
@@ -52,20 +51,23 @@ function watch_img_dir()
 
 function cmd_watch_callback(event_type, file_name)
 {
-    if(!file_name.endsWith('.js')) return;
-    
+    if(!file_name.endsWith('.js')) 
+        return;
+
     let cmd_name = file_name.slice(0, -3);
+    
     if(commands[cmd_name])
     {   
         remove_command(cmd_name, file_name);
         add_command(file_name);
+        success(`${cmd_name} command updated.`);
     }
     else
     {
         add_command(file_name);
         register_commands();
+        success(`${cmd_name} command added.`);
     }
-    success(`${cmd_name} command updated.`);
 }
 
 function remove_command(cmd_name, file_name)
@@ -94,7 +96,7 @@ function add_command(file_name)
         )
         {
             throw new SyntaxError(
-                `Command is malformed must have: data: ${command.data} data.name: ${!command.data.name}, data,description: ${command.data.name}, get_response: ${command.get_response}, and self_test: ${command.self_test} defined at a minimum`
+                `Command is malformed must have:\ndata: ${command.data}\nname: ${command.data.name}\ndescription: ${command.data.description}\nget_response: ${command.get_response}\nself_test: ${command.self_test}`
             );
         }
         commands[command.data.name] = command;
@@ -107,7 +109,8 @@ function add_command(file_name)
 function img_watch_callback(event_type, file_name)
 {
     if(event_type == 'change')
-        return; //don't need to update anything on change
+        return; //don't need to update if images changes
+    
     add_img_command(file_name);
 }
 
@@ -115,7 +118,9 @@ function add_img_command(file_name)
 {
     const cmd_name = file_name.slice(0, -4);
     const file_string = get_img_command_file_string(cmd_name);
+    info(`Attempting to add ${cmd_name} image command...`);
     fs.writeFileSync(`${process.env.CMD_DIR}${cmd_name}.js`, file_string);
+    success(`Successfully added command for image: ${file_name}`);
 }
 
 function get_img_command_file_string(cmd_name)
@@ -143,11 +148,6 @@ module.exports = {
     return s;
 }
 
-function get_commands()
-{
-    return commands;
-}
-
 function get_command_by_name(cmd_name)
 {
     return commands[cmd_name];
@@ -158,7 +158,7 @@ function get_register_commands()
     const cmd_list = [];
     for(const cmd in commands)
     {
-        cmd_list.push(commands[cmd].data)
+        cmd_list.push(commands[cmd].data);
     }
     return cmd_list;
 }

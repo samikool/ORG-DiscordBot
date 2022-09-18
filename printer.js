@@ -3,24 +3,20 @@ const yellow = "\u001b[33m"
 const white = "\u001b[37m"
 const green = "\u001b[32m"
 
-function success(str){
-    print(str, "[SUCCESS]", green);
+function info(str){
+    console.info(`${white}[INFO] ${str}`);
 }
 
-function info(str){
-    print(str, "[INFO]", white)
+function success(str){
+    console.info(`${green}[SUCCESS] ${white}${str}`);
 }
 
 function warning(str){
-    print(str, "[WARNING]", yellow)
+    console.warn(`${yellow}[WARNING] ${white}${str}`);
 }
 
 function error(str){
-    print(str, "[ERROR]", red)
-}
-
-function print(str, header, color){
-    console.log(`${color}${header} ${white}${str}`)
+    console.error(`${red}[ERROR] ${white}${str}`);
 }
 
 module.exports = {
