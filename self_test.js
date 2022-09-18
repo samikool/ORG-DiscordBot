@@ -9,9 +9,12 @@ async function self_test(client) {
         await client.channels.fetch(staging_general_channel) : 
         await client.channels.fetch(production_bot_testing_channel);
 
-        info("Running self-test");
+    info("Running self-test");
 
     try{
+        if(Object.keys(client.commands) == 0)
+            throw new Error("No commands were found to test. Failing on purpose.");
+
         for(let cmd_name in client.commands)
         {
             let cmd = client.commands[cmd_name];
