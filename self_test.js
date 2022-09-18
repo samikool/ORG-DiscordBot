@@ -13,11 +13,11 @@ async function self_test(client) {
         for(let cmd_name in client.commands)
         {
             let cmd = client.commands[cmd_name]
-            if(cmd_name != 'test' && cmd_name != 'addimagecommand' && cmd_name != 'samisretarded')
-            {
-                info(`Testing: ${cmd_name}`);
-                await channel.send(await cmd.get_response({}));
-            }
+            if(cmd_name == 'addtfeverart' || cmd_name == 'addimagecommand' || cmd_name == 'samisretarded')
+                continue;
+
+            info(`Testing: ${cmd_name}`);
+            await channel.send(await cmd.get_response({}));
         }
     } catch(e)
     {
