@@ -1,11 +1,7 @@
 node_modules
 .env
-.vscode
-*.sql
-scripts
 package-lock.json
+images
+commands
+*.sh
 nodemon.json
-commands/
-commands.json
-json-to-js.js
-.dockerignore

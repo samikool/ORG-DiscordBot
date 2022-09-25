@@ -15,8 +15,8 @@ jobs:
       - name: run test
         run: |
           docker run --name discordbot-test \
-          -v ${{ secrets.IMG_DIR }}:${{ secrets.IMG_DIR }} \
-          -v ${{ secrets.CMD_DIR }}:${{ secrets.CMD_DIR }} \
+          -v ${{ secrets.IMG_DIR }}:/app/images \
+          -v ${{ secrets.CMD_DIR }}:/app/commands \
           discordbot:${{ github.ref_name }} \
           node /app/discordBot.js test
 

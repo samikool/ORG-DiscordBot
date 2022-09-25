@@ -31,6 +31,6 @@ jobs:
       - name: start production
         run: |
           docker run -i -t -d --restart always --name discordbot-production \
-          -v ${{ secrets.IMG_DIR_PRODUCTION }}:${{ secrets.IMG_DIR_PRODUCTION }} \
-          -v ${{ secrets.CMD_DIR_PRODUCTION }}:${{ secrets.CMD_DIR_PRODUCTION }} \
+          -v ${{ secrets.IMG_DIR_PRODUCTION }}:/app/images \
+          -v ${{ secrets.CMD_DIR_PRODUCTION }}:/app/commands \
           discordbot:master
