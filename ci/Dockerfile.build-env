@@ -1,4 +1,9 @@
-FROM node:latest
+FROM debian:latest
 
-#Update npm
+RUN apt update
+RUN apt install -y ffmpeg libtool nodejs npm curl
+
+#Upgrade node/npm to latest stable
 RUN npm install -g npm@latest
+RUN npm install -g n
+RUN n stable
