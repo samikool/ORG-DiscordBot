@@ -5,3 +5,4 @@ images
 commands
 *.sh
 nodemon.json
+scripts/

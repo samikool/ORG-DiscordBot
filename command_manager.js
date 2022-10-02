@@ -61,15 +61,14 @@ function cmd_watch_callback(event_type, file_name)
         info(`Attempting to update: ${cmd_name}`);
         remove_command(cmd_name, file_name);
         add_command(file_name);
-        
     }
     else
     {
         info(`Attempting to add new command: ${cmd_name}`);
         add_command(file_name);
-        register_commands();
         success(`${cmd_name} command added.`);
     }
+    register_commands();
 }
 
 function remove_command(cmd_name, file_name)
