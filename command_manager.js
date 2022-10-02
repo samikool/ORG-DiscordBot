@@ -57,13 +57,15 @@ function cmd_watch_callback(event_type, file_name)
     let cmd_name = file_name.slice(0, -3);
     
     if(commands[cmd_name])
-    {   
+    {
+        info(`Attempting to update: ${cmd_name}`);
         remove_command(cmd_name, file_name);
         add_command(file_name);
-        success(`${cmd_name} command updated.`);
+        
     }
     else
     {
+        info(`Attempting to add new command: ${cmd_name}`);
         add_command(file_name);
         register_commands();
         success(`${cmd_name} command added.`);
@@ -72,7 +74,7 @@ function cmd_watch_callback(event_type, file_name)
 
 function remove_command(cmd_name, file_name)
 {
-    delete require.cache[`${process.env.CMD_DIR}${file_name}`];
+    delete require.cache[require.resolve(`${process.env.CMD_DIR}${file_name}`)];
     delete commands[cmd_name];
 }
 
@@ -100,6 +102,7 @@ function add_command(file_name)
             );
         }
         commands[command.data.name] = command;
+        success(`${command.data.name} command updated.`);
     } catch(e) {
         warning(`Unable to load command from ${file_name}`);
         warning(e);
