@@ -31,18 +31,38 @@ client.on('ready', async function ()  {
 
 
 client.on('interactionCreate', async interaction => {
-    if(!interaction.isChatInputCommand()) 
+    if(interaction.isAutocomplete())
+    {
+        const focusedValue = interaction.options.getFocused(true);       
+        const cmd = get_command_by_name(interaction.commandName);
+        const choices = await cmd.get_choices(focusedValue.name, focusedValue.value);
+
+        try
+        {
+            await interaction.respond(choices);
+        }
+        catch(e)
+        {
+            error(`Error getting choices for: ${cmd.data.name}`)
+            error(e);
+        }
+        return;
+    }
+
+    if(!interaction.isChatInputCommand())
         return;
     
     const cmd = get_command_by_name(interaction.commandName);
-    if(!cmd) {
+    if(!cmd) 
+    {
         warning(`Tried to execute unregistered command: ${interaction.commandName}`);
         return;
     }
 
     info(`command: ${cmd.data.name}`);
 
-    try{
+    try
+    {
         interaction.reply(await cmd.get_response(interaction));
     } 
     catch (e) { 
