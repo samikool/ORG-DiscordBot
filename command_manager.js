@@ -25,13 +25,16 @@ function load_commands(client)
     client.commands = commands;
 }
 
-async function register_commands()
+async function register_commands(client)
 {
-    await rest.put(Routes.applicationGuildCommands(process.env.BOT_ID, process.env.SERVER_ID), 
+    client.guilds.cache.forEach(async guild => {
+        info(`Registerting commands for: ${guild.name}`)
+        await rest.put(Routes.applicationGuildCommands(process.env.BOT_ID, guild.id), 
         {
             body: get_register_commands()
-        }
-    );
+        });
+    });
+
     return 0;
 }
 

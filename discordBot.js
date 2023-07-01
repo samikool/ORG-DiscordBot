@@ -14,7 +14,6 @@ const client = new Client({intents: 0xFFFF});
  */
 client.on('ready', async function ()  {
     success(`Logged in as ${client.user.tag}!`);
-    info("Registering commands...");
 
     if(init_commands(client))
     {
@@ -23,9 +22,8 @@ client.on('ready', async function ()  {
     }
 
     success("Commands registered successfully.");
-    info("Starting heartbeat...")
-
     setInterval(heartbeat, 100)
+    success("Started heartbeat.")
     
     if(process.argv[2] == "test")
     {
@@ -86,17 +84,7 @@ client.on('shardError', (e, i) =>{
 async function heartbeat(){
     if(!client.isReady())
     {
-        last_online_time = client.readyAt   
         await login()
-        current_time = new Date()
-        seconds_offline = (current_time - last_online_time) / 1000
-        
-        //**** Enable after testing in production ****//
-        // main_channel = await client.guilds.resolve(process.env.SERVER_ID).channels.resolve(process.env.MAIN_CHANNEL_ID)
-        // main_channel.send(`<@${process.env.TIM_USER_ID}> Hey, I'm so very sorry that I was offline for ${seconds_offline} seconds. Luckily, you're beloved admin Sam is a god programmer, and was able to make it so I can automatically log back in. I hope you continue to enjoy this amazing Discord server :)`)
-        
-        info("Had to relog...")
-        info(`Was offline for ${seconds_offline} seconds...`)
     }
 }
 
