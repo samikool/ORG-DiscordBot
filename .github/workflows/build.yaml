@@ -18,7 +18,7 @@ jobs:
           cp ${{ secrets.DOTENV }} .env
       - name: build-env
         run: |
-          docker build -t discordbot-env:${{ github.ref_name }} -f ci/Dockerfile.build-env .
+          docker build --no-cache -t discordbot-env:${{ github.ref_name }} -f ci/Dockerfile.build-env .
       - name: build-image
         run: |
-          docker build --build-arg build_env=${{ github.ref_name }} -t discordbot:${{ github.ref_name }} -f ci/Dockerfile .
+          docker build --no-cache --build-arg build_env=${{ github.ref_name }} -t discordbot:${{ github.ref_name }} -f ci/Dockerfile .
