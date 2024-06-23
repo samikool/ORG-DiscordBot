@@ -1,5 +1,5 @@
 {
-  "name": "tarkovdiscordbot",
+  "name": "org-discordbot",
   "version": "1.0.0",
   "description": "This bot is fucking sick yo",
   "main": "discordBot.js",
